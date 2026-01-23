@@ -307,20 +307,7 @@ export default function Dashboard() {
                     </Link>
                   </div>
 
-                  <div className="bg-card border border-border rounded-lg p-6">
-                    <h3 className="text-xl font-headline mb-4">Monthly Live Q&A Sessions</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Join our monthly live sessions with experienced practitioners and researchers.
-                    </p>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                      <Calendar className="w-4 h-4" />
-                      <span>Next session: February 1, 2026 at 7:00 PM EST</span>
-                    </div>
-                    <Button variant="outline" className="font-typewriter">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      VIEW SCHEDULE
-                    </Button>
-                  </div>
+
                 </motion.div>
               </TabsContent>
             </Tabs>

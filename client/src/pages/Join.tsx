@@ -152,7 +152,6 @@ export default function Join() {
                     "Dosing guides and safety protocols",
                     "Integration support and resources",
                     "Private discussion forums",
-                    "Monthly live Q&A sessions with experts",
                     "Exclusive research updates and news",
                     "Community support for your healing journey",
                     "FREE: Beginner's Guide to Safe Microdosing"

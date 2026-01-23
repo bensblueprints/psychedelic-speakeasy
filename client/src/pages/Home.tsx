@@ -613,7 +613,6 @@ export default function Home() {
                   "Dosing guides and safety protocols",
                   "Integration support and resources",
                   "Private discussion forums",
-                  "Monthly live Q&A sessions with experts",
                   "Exclusive research updates and news",
                   "Community support for your healing journey"
                 ].map((item, index) => (

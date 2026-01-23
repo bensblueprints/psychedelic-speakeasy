@@ -223,10 +223,7 @@ export default function BlogPost() {
                   <span className="text-primary">✓</span>
                   <span>Private community of fellow seekers</span>
                 </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <span className="text-primary">✓</span>
-                  <span>Monthly expert Q&A sessions</span>
-                </li>
+
               </ul>
               <p className="text-2xl font-headline text-primary mb-4">
                 Just $97/year

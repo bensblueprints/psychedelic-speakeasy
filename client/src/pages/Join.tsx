@@ -67,8 +67,8 @@ export default function Join() {
     );
   }
 
-  // Already a member
-  if (membershipStatus?.hasMembership) {
+  // Already a member (but not admin - admins should see the page for testing)
+  if (membershipStatus?.hasMembership && !membershipStatus?.isAdmin) {
     return (
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-8">

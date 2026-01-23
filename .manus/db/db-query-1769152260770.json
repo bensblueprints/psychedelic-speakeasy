@@ -1,0 +1,17 @@
+{
+  "query": "SELECT u.id, u.name, u.email, u.role, m.status FROM users u LEFT JOIN memberships m ON u.id = m.userId LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SELECT u.id, u.name, u.email, u.role, m.status FROM users u LEFT JOIN memberships m ON u.id = m.userId LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Benji Tate",
+      "email": "ben@justfeatured.com",
+      "role": "admin",
+      "status": "active"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\tstatus\n1\tBenji Tate\tben@justfeatured.com\tadmin\tactive\n",
+  "stderr": "",
+  "execution_time_ms": 1525
+}

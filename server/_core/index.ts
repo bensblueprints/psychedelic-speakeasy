@@ -8,6 +8,7 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import klaviyoRouter from "../klaviyo";
+import seedRouter from "../seed-blogs-api";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -38,6 +39,8 @@ async function startServer() {
   registerOAuthRoutes(app);
   // Klaviyo API
   app.use("/api/klaviyo", klaviyoRouter);
+  // Seed API (for initial data population)
+  app.use("/api", seedRouter);
   // tRPC API
   app.use(
     "/api/trpc",

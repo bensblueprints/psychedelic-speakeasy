@@ -16,6 +16,8 @@ import {
   LogIn
 } from "lucide-react";
 import { Link } from "wouter";
+import { trpc } from "@/lib/trpc";
+import { ArrowRight, BookOpen } from "lucide-react";
 
 /*
  * DESIGN: "The Underground Press" - Gonzo Journalism Revival
@@ -31,6 +33,74 @@ import { Link } from "wouter";
  * - Community opt-in form
  * - Vetted vendor messaging
  */
+
+// Component to display latest articles
+function LatestArticles() {
+  const { data: posts, isLoading } = trpc.blog.list.useQuery({ limit: 6, offset: 0 });
+
+  if (isLoading) {
+    return (
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-card border border-border rounded-lg p-6 animate-pulse">
+            <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
+            <div className="h-6 bg-muted rounded w-3/4 mb-3"></div>
+            <div className="h-4 bg-muted rounded w-full mb-2"></div>
+            <div className="h-4 bg-muted rounded w-2/3"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (!posts || posts.length === 0) {
+    return (
+      <div className="text-center py-12 bg-card/50 border border-border rounded-lg">
+        <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+        <p className="text-muted-foreground">Articles coming soon...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.slice(0, 6).map((post, index) => (
+        <motion.article
+          key={post.id}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: index * 0.1 }}
+          className="bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-colors group"
+        >
+          <Link href={`/blog/${post.slug}`}>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-typewriter text-primary uppercase">
+                  {post.category || 'Research'}
+                </span>
+                <span className="text-muted-foreground">•</span>
+                <span className="text-xs text-muted-foreground font-typewriter">
+                  {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Draft'}
+                </span>
+              </div>
+              <h4 className="text-lg font-headline text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                {post.title}
+              </h4>
+              <p className="text-sm text-muted-foreground line-clamp-3 font-body">
+                {post.excerpt}
+              </p>
+              <div className="mt-4 flex items-center text-primary text-sm font-typewriter">
+                READ MORE
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+          </Link>
+        </motion.article>
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
@@ -705,6 +775,46 @@ export default function Home() {
             <p className="text-center text-xs text-muted-foreground mt-8 font-typewriter">
               * Names and locations changed to protect member privacy. Results may vary.
             </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Latest Articles Section */}
+      <section className="py-16 md:py-24 bg-card/30">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-5xl mx-auto"
+          >
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <h3 className="text-2xl md:text-3xl font-headline text-foreground">
+                  Latest From The Underground
+                </h3>
+                <p className="text-muted-foreground mt-2 font-body">
+                  Investigative reports, research updates, and healing stories
+                </p>
+              </div>
+              <Link href="/blog">
+                <Button variant="outline" className="font-typewriter text-xs hidden md:flex">
+                  VIEW ALL ARTICLES
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+
+            <LatestArticles />
+
+            <div className="text-center mt-8 md:hidden">
+              <Link href="/blog">
+                <Button variant="outline" className="font-typewriter text-xs">
+                  VIEW ALL ARTICLES
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

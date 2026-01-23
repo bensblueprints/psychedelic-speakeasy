@@ -1,0 +1,101 @@
+{
+  "query": "SELECT * FROM community_spaces;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SELECT * FROM community_spaces;",
+  "rows": [
+    {
+      "id": "1",
+      "slug": "introductions",
+      "name": "Introductions",
+      "description": "Welcome! Share your story and why you are here.",
+      "icon": "hand-wave",
+      "color": "#10B981",
+      "sortOrder": "1",
+      "isActive": "1",
+      "postCount": "0",
+      "createdAt": "2026-01-23 05:22:52",
+      "isDefault": "1"
+    },
+    {
+      "id": "2",
+      "slug": "microdosing",
+      "name": "Microdosing Journey",
+      "description": "Share your microdosing experiences and protocols.",
+      "icon": "sparkles",
+      "color": "#8B5CF6",
+      "sortOrder": "2",
+      "isActive": "1",
+      "postCount": "0",
+      "createdAt": "2026-01-23 05:22:52",
+      "isDefault": "0"
+    },
+    {
+      "id": "3",
+      "slug": "amanita",
+      "name": "Amanita Experiences",
+      "description": "Discuss Amanita Muscaria experiences and preparation.",
+      "icon": "flame",
+      "color": "#EF4444",
+      "sortOrder": "3",
+      "isActive": "1",
+      "postCount": "0",
+      "createdAt": "2026-01-23 05:22:52",
+      "isDefault": "0"
+    },
+    {
+      "id": "4",
+      "slug": "psilocybin",
+      "name": "Psilocybin Stories",
+      "description": "Share psilocybin journeys and insights.",
+      "icon": "moon",
+      "color": "#3B82F6",
+      "sortOrder": "4",
+      "isActive": "1",
+      "postCount": "0",
+      "createdAt": "2026-01-23 05:22:52",
+      "isDefault": "0"
+    },
+    {
+      "id": "5",
+      "slug": "recovery",
+      "name": "Recovery & Healing",
+      "description": "Support for addiction recovery and trauma healing.",
+      "icon": "heart",
+      "color": "#F59E0B",
+      "sortOrder": "5",
+      "isActive": "1",
+      "postCount": "0",
+      "createdAt": "2026-01-23 05:22:52",
+      "isDefault": "0"
+    },
+    {
+      "id": "6",
+      "slug": "integration",
+      "name": "Integration",
+      "description": "How to integrate psychedelic experiences into daily life.",
+      "icon": "sun",
+      "color": "#06B6D4",
+      "sortOrder": "6",
+      "isActive": "1",
+      "postCount": "0",
+      "createdAt": "2026-01-23 05:22:52",
+      "isDefault": "0"
+    },
+    {
+      "id": "7",
+      "slug": "questions",
+      "name": "Questions & Answers",
+      "description": "Ask questions and get answers from the community.",
+      "icon": "help-circle",
+      "color": "#EC4899",
+      "sortOrder": "7",
+      "isActive": "1",
+      "postCount": "0",
+      "createdAt": "2026-01-23 05:22:52",
+      "isDefault": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tslug\tname\tdescription\ticon\tcolor\tsortOrder\tisActive\tpostCount\tcreatedAt\tisDefault\n1\tintroductions\tIntroductions\tWelcome! Share your story and why you are here.\thand-wave\t#10B981\t1\t1\t0\t2026-01-23 05:22:52\t1\n2\tmicrodosing\tMicrodosing Journey\tShare your microdosing experiences and protocols.\tsparkles\t#8B5CF6\t2\t1\t0\t2026-01-23 05:22:52\t0\n3\tamanita\tAmanita Experiences\tDiscuss Amanita Muscaria experiences and preparation.\tflame\t#EF4444\t3\t1\t0\t2026-01-23 05:22:52\t0\n4\tpsilocybin\tPsilocybin Stories\tShare psilocybin journeys and insights.\tmoon\t#3B82F6\t4\t1\t0\t2026-01-23 05:22:52\t0\n5\trecovery\tRecovery & Healing\tSupport for addiction recovery and trauma healing.\theart\t#F59E0B\t5\t1\t0\t2026-01-23 05:22:52\t0\n6\tintegration\tIntegration\tHow to integrate psychedelic experiences into daily life.\tsun\t#06B6D4\t6\t1\t0\t2026-01-23 05:22:52\t0\n7\tquestions\tQuestions & Answers\tAsk questions and get answers from the community.\thelp-circle\t#EC4899\t7\t1\t0\t2026-01-23 05:22:52\t0\n",
+  "stderr": "",
+  "execution_time_ms": 1539
+}

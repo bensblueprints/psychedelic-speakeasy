@@ -1,0 +1,43 @@
+{
+  "query": "SELECT column_name FROM information_schema.columns WHERE table_name = 'community_spaces';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SELECT column_name FROM information_schema.columns WHERE table_name = 'community_spaces';",
+  "rows": [
+    {
+      "column_name": "id"
+    },
+    {
+      "column_name": "slug"
+    },
+    {
+      "column_name": "name"
+    },
+    {
+      "column_name": "description"
+    },
+    {
+      "column_name": "icon"
+    },
+    {
+      "column_name": "color"
+    },
+    {
+      "column_name": "sortOrder"
+    },
+    {
+      "column_name": "isActive"
+    },
+    {
+      "column_name": "postCount"
+    },
+    {
+      "column_name": "createdAt"
+    },
+    {
+      "column_name": "isDefault"
+    }
+  ],
+  "messages": [],
+  "stdout": "column_name\nid\nslug\nname\ndescription\nicon\ncolor\nsortOrder\nisActive\npostCount\ncreatedAt\nisDefault\n",
+  "stderr": "",
+  "execution_time_ms": 1505
+}

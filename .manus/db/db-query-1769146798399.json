@@ -1,0 +1,23 @@
+{
+  "query": "SELECT * FROM community_spaces LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SELECT * FROM community_spaces LIMIT 1;",
+  "rows": [
+    {
+      "id": "1",
+      "slug": "introductions",
+      "name": "Introductions",
+      "description": "Welcome! Share your story and why you are here.",
+      "icon": "hand-wave",
+      "color": "#10B981",
+      "sortOrder": "1",
+      "isActive": "1",
+      "postCount": "0",
+      "createdAt": "2026-01-23 05:22:52",
+      "isDefault": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tslug\tname\tdescription\ticon\tcolor\tsortOrder\tisActive\tpostCount\tcreatedAt\tisDefault\n1\tintroductions\tIntroductions\tWelcome! Share your story and why you are here.\thand-wave\t#10B981\t1\t1\t0\t2026-01-23 05:22:52\t1\n",
+  "stderr": "",
+  "execution_time_ms": 1539
+}

@@ -40,3 +40,11 @@
 
 ## Phase 8: Opt-in Page Improvements
 - [x] Move email collection form above the fold on /optin page
+
+
+## Phase 10: Community CRUD Fixes
+- [x] Fix profile creation functionality
+- [x] Ensure post creation works
+- [x] Add post editing functionality
+- [x] Add post deletion functionality
+- [x] Create default community spaces

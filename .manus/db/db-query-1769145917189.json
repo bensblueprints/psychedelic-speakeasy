@@ -1,0 +1,18 @@
+{
+  "query": "SHOW COLUMNS FROM member_profiles WHERE Field = 'journeyStage';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SHOW COLUMNS FROM member_profiles WHERE Field = 'journeyStage';",
+  "rows": [
+    {
+      "Field": "journeyStage",
+      "Type": "enum('researching','preparing','started','experienced','guide')",
+      "Null": "YES",
+      "Key": "",
+      "Default": "researching",
+      "Extra": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\njourneyStage\tenum('researching','preparing','started','experienced','guide')\tYES\t\tresearching\t\n",
+  "stderr": "",
+  "execution_time_ms": 1495
+}

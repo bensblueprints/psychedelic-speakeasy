@@ -1,0 +1,16 @@
+{
+  "query": "SELECT column_name FROM information_schema.columns WHERE table_name = 'member_profiles' AND column_name IN ('createdAt', 'joinedAt');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SELECT column_name FROM information_schema.columns WHERE table_name = 'member_profiles' AND column_name IN ('createdAt', 'joinedAt');",
+  "rows": [
+    {
+      "column_name": "joinedAt"
+    },
+    {
+      "column_name": "createdAt"
+    }
+  ],
+  "messages": [],
+  "stdout": "column_name\njoinedAt\ncreatedAt\n",
+  "stderr": "",
+  "execution_time_ms": 1543
+}

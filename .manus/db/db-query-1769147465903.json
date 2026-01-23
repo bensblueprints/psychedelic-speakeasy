@@ -1,0 +1,26 @@
+{
+  "query": "SELECT * FROM member_profiles LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SELECT * FROM member_profiles LIMIT 1;",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "1",
+      "displayName": "HealingSeeker",
+      "avatarIcon": "mushroom-1",
+      "avatarColor": "#8B5CF6",
+      "bio": "NULL",
+      "joinReasons": "[\"ptsd\"]",
+      "journeyStage": "researching",
+      "isPublic": "1",
+      "postCount": "0",
+      "commentCount": "0",
+      "joinedAt": "2026-01-23 05:36:05",
+      "updatedAt": "2026-01-23 05:36:05",
+      "createdAt": "2026-01-23 05:36:05"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tdisplayName\tavatarIcon\tavatarColor\tbio\tjoinReasons\tjourneyStage\tisPublic\tpostCount\tcommentCount\tjoinedAt\tupdatedAt\tcreatedAt\n1\t1\tHealingSeeker\tmushroom-1\t#8B5CF6\tNULL\t[\"ptsd\"]\tresearching\t1\t0\t0\t2026-01-23 05:36:05\t2026-01-23 05:36:05\t2026-01-23 05:36:05\n",
+  "stderr": "",
+  "execution_time_ms": 1506
+}

@@ -1,4 +1,4 @@
-import { eq, desc, and, lte, isNotNull } from "drizzle-orm";
+import { eq, desc, and, lte, isNotNull, sql, count } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
   InsertUser, 
@@ -8,13 +8,22 @@ import {
   blogPosts,
   InsertBlogPost,
   emailSubscribers,
-  InsertEmailSubscriber
+  InsertEmailSubscriber,
+  memberProfiles,
+  InsertMemberProfile,
+  communitySpaces,
+  InsertCommunitySpace,
+  communityPosts,
+  InsertCommunityPost,
+  postComments,
+  InsertPostComment,
+  postLikes,
+  InsertPostLike
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
@@ -127,10 +136,8 @@ export async function getActiveMembership(userId: number) {
   
   if (result.length === 0) return null;
   
-  // Check if membership is expired
   const membership = result[0];
   if (membership.endDate < now) {
-    // Update status to expired
     await db
       .update(memberships)
       .set({ status: "expired" })
@@ -264,7 +271,7 @@ export async function incrementBlogViewCount(id: number) {
   if (post) {
     await db
       .update(blogPosts)
-      .set({ viewCount: post.viewCount + 1 })
+      .set({ viewCount: (post.viewCount || 0) + 1 })
       .where(eq(blogPosts.id, id));
   }
 }
@@ -333,4 +340,388 @@ export async function updateUserRole(userId: number, role: 'user' | 'admin') {
   if (!db) throw new Error("Database not available");
   
   await db.update(users).set({ role }).where(eq(users.id, userId));
+}
+
+// ============ MEMBER PROFILE QUERIES ============
+
+export async function createMemberProfile(profile: InsertMemberProfile) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(memberProfiles).values(profile);
+  return result;
+}
+
+export async function getMemberProfileByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(memberProfiles)
+    .where(eq(memberProfiles.userId, userId))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getMemberProfileById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(memberProfiles)
+    .where(eq(memberProfiles.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function updateMemberProfile(userId: number, updates: Partial<InsertMemberProfile>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(memberProfiles).set(updates).where(eq(memberProfiles.userId, userId));
+}
+
+export async function getMemberProfileCount() {
+  const db = await getDb();
+  if (!db) return 0;
+  
+  const result = await db.select({ count: count() }).from(memberProfiles);
+  return result[0]?.count || 0;
+}
+
+export async function getAllMemberProfiles(limit = 50, offset = 0) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(memberProfiles)
+    .orderBy(desc(memberProfiles.joinedAt))
+    .limit(limit)
+    .offset(offset);
+}
+
+// ============ COMMUNITY SPACE QUERIES ============
+
+export async function createCommunitySpace(space: InsertCommunitySpace) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(communitySpaces).values(space);
+  return result;
+}
+
+export async function getCommunitySpaces() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(communitySpaces)
+    .orderBy(communitySpaces.sortOrder);
+}
+
+export async function getCommunitySpaceBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(communitySpaces)
+    .where(eq(communitySpaces.slug, slug))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getCommunitySpaceById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(communitySpaces)
+    .where(eq(communitySpaces.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function updateSpacePostCount(spaceId: number, increment: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const space = await getCommunitySpaceById(spaceId);
+  if (space) {
+    await db
+      .update(communitySpaces)
+      .set({ postCount: space.postCount + increment })
+      .where(eq(communitySpaces.id, spaceId));
+  }
+}
+
+// ============ COMMUNITY POST QUERIES ============
+
+export async function createCommunityPost(post: InsertCommunityPost) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(communityPosts).values(post);
+  
+  // Update space post count
+  await updateSpacePostCount(post.spaceId, 1);
+  
+  return result;
+}
+
+export async function getCommunityPostById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(communityPosts)
+    .where(eq(communityPosts.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getCommunityPostsBySpace(spaceId: number, limit = 20, offset = 0) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(communityPosts)
+    .where(eq(communityPosts.spaceId, spaceId))
+    .orderBy(desc(communityPosts.isPinned), desc(communityPosts.createdAt))
+    .limit(limit)
+    .offset(offset);
+}
+
+export async function getRecentCommunityPosts(limit = 20, offset = 0) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(communityPosts)
+    .orderBy(desc(communityPosts.createdAt))
+    .limit(limit)
+    .offset(offset);
+}
+
+export async function updateCommunityPost(id: number, updates: Partial<InsertCommunityPost>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(communityPosts).set(updates).where(eq(communityPosts.id, id));
+}
+
+export async function deleteCommunityPost(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Delete associated comments and likes first
+  await db.delete(postComments).where(eq(postComments.postId, id));
+  await db.delete(postLikes).where(eq(postLikes.postId, id));
+  
+  // Delete the post
+  await db.delete(communityPosts).where(eq(communityPosts.id, id));
+}
+
+export async function incrementPostViewCount(id: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const post = await getCommunityPostById(id);
+  if (post) {
+    await db
+      .update(communityPosts)
+      .set({ viewCount: (post.viewCount || 0) + 1 })
+      .where(eq(communityPosts.id, id));
+  }
+}
+
+export async function updatePostCommentCount(postId: number, increment: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const post = await getCommunityPostById(postId);
+  if (post) {
+    await db
+      .update(communityPosts)
+      .set({ commentCount: (post.commentCount || 0) + increment })
+      .where(eq(communityPosts.id, postId));
+  }
+}
+
+export async function updatePostLikeCount(postId: number, increment: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const post = await getCommunityPostById(postId);
+  if (post) {
+    await db
+      .update(communityPosts)
+      .set({ likeCount: (post.likeCount || 0) + increment })
+      .where(eq(communityPosts.id, postId));
+  }
+}
+
+// ============ POST COMMENT QUERIES ============
+
+export async function createPostComment(comment: InsertPostComment) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(postComments).values(comment);
+  
+  // Update post comment count
+  await updatePostCommentCount(comment.postId, 1);
+  
+  return result;
+}
+
+export async function getPostComments(postId: number, limit = 50, offset = 0) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(postComments)
+    .where(eq(postComments.postId, postId))
+    .orderBy(postComments.createdAt)
+    .limit(limit)
+    .offset(offset);
+}
+
+export async function getCommentById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(postComments)
+    .where(eq(postComments.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function updateCommentLikeCount(commentId: number, increment: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const comment = await getCommentById(commentId);
+  if (comment) {
+    await db
+      .update(postComments)
+      .set({ likeCount: (comment.likeCount || 0) + increment })
+      .where(eq(postComments.id, commentId));
+  }
+}
+
+// ============ POST LIKE QUERIES ============
+
+export async function addPostLike(like: InsertPostLike) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  try {
+    await db.insert(postLikes).values(like);
+    
+    if (like.postId) {
+      await updatePostLikeCount(like.postId, 1);
+    }
+    if (like.commentId) {
+      await updateCommentLikeCount(like.commentId, 1);
+    }
+    
+    return { success: true };
+  } catch (error: any) {
+    if (error.code === 'ER_DUP_ENTRY') {
+      return { success: false, error: 'Already liked' };
+    }
+    throw error;
+  }
+}
+
+export async function removePostLike(profileId: number, postId?: number, commentId?: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  if (postId) {
+    await db
+      .delete(postLikes)
+      .where(and(eq(postLikes.profileId, profileId), eq(postLikes.postId, postId)));
+    await updatePostLikeCount(postId, -1);
+  }
+  
+  if (commentId) {
+    await db
+      .delete(postLikes)
+      .where(and(eq(postLikes.profileId, profileId), eq(postLikes.commentId, commentId)));
+    await updateCommentLikeCount(commentId, -1);
+  }
+}
+
+export async function hasUserLikedPost(profileId: number, postId: number) {
+  const db = await getDb();
+  if (!db) return false;
+  
+  const result = await db
+    .select()
+    .from(postLikes)
+    .where(and(eq(postLikes.profileId, profileId), eq(postLikes.postId, postId)))
+    .limit(1);
+  
+  return result.length > 0;
+}
+
+export async function hasUserLikedComment(profileId: number, commentId: number) {
+  const db = await getDb();
+  if (!db) return false;
+  
+  const result = await db
+    .select()
+    .from(postLikes)
+    .where(and(eq(postLikes.profileId, profileId), eq(postLikes.commentId, commentId)))
+    .limit(1);
+  
+  return result.length > 0;
+}
+
+// ============ BULK INSERT FOR SEEDING ============
+
+export async function bulkInsertMemberProfiles(profiles: InsertMemberProfile[]) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  if (profiles.length === 0) return;
+  
+  await db.insert(memberProfiles).values(profiles);
+}
+
+export async function bulkInsertCommunityPosts(posts: InsertCommunityPost[]) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  if (posts.length === 0) return;
+  
+  await db.insert(communityPosts).values(posts);
+}
+
+export async function bulkInsertPostComments(comments: InsertPostComment[]) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  if (comments.length === 0) return;
+  
+  await db.insert(postComments).values(comments);
 }

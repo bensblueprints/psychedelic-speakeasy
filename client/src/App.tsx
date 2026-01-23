@@ -11,6 +11,8 @@ import Join from "./pages/Join";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import OptIn from "./pages/OptIn";
+import Community from "./pages/Community";
+import PostDetail from "./pages/PostDetail";
 
 function Router() {
   return (
@@ -18,10 +20,15 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/optin"} component={OptIn} />
       <Route path={"/blog"} component={Blog} />
+      <Route path={"/articles"} component={Blog} />
       <Route path={"/blog/:slug"} component={BlogPost} />
+      <Route path={"/articles/:slug"} component={BlogPost} />
       <Route path={"/join"} component={Join} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/admin"} component={AdminDashboard} />
+      <Route path={"/community"} component={Community} />
+      <Route path={"/community/space/:slug"} component={Community} />
+      <Route path={"/community/post/:id"} component={PostDetail} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

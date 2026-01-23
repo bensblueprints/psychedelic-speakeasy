@@ -1,17 +1,10 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, boolean, bigint } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, boolean } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
  */
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
@@ -36,7 +29,7 @@ export const memberships = mysqlTable("memberships", {
   endDate: timestamp("endDate").notNull(),
   stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
   stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
-  amount: int("amount").notNull(), // in cents
+  amount: int("amount").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -57,11 +50,11 @@ export const blogPosts = mysqlTable("blog_posts", {
   metaDescription: varchar("metaDescription", { length: 500 }),
   featuredImage: varchar("featuredImage", { length: 500 }),
   category: varchar("category", { length: 100 }),
-  tags: text("tags"), // JSON array stored as text
+  tags: text("tags"),
   authorId: int("authorId"),
   isPublished: boolean("isPublished").default(false).notNull(),
   publishedAt: timestamp("publishedAt"),
-  scheduledFor: timestamp("scheduledFor"), // For scheduled publishing
+  scheduledFor: timestamp("scheduledFor"),
   viewCount: int("viewCount").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -76,11 +69,109 @@ export type InsertBlogPost = typeof blogPosts.$inferInsert;
 export const emailSubscribers = mysqlTable("email_subscribers", {
   id: int("id").autoincrement().primaryKey(),
   email: varchar("email", { length: 320 }).notNull().unique(),
+  firstName: varchar("firstName", { length: 100 }),
   status: mysqlEnum("status", ["pending", "subscribed", "unsubscribed"]).default("pending").notNull(),
-  source: varchar("source", { length: 100 }), // where they signed up from
+  source: varchar("source", { length: 100 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 export type EmailSubscriber = typeof emailSubscribers.$inferSelect;
 export type InsertEmailSubscriber = typeof emailSubscribers.$inferInsert;
+
+/**
+ * Member profiles - anonymous community profiles
+ * Note: Column names match actual database (joinedAt instead of createdAt for profile creation)
+ */
+export const memberProfiles = mysqlTable("member_profiles", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  displayName: varchar("displayName", { length: 100 }).notNull(),
+  avatarIcon: varchar("avatarIcon", { length: 50 }).default("mushroom-1").notNull(),
+  avatarColor: varchar("avatarColor", { length: 20 }).default("#8B5CF6").notNull(),
+  bio: text("bio"),
+  journeyStage: mysqlEnum("journeyStage", ["researching", "preparing", "started", "experienced", "guide"]).default("researching"),
+  joinReasons: text("joinReasons"), // JSON array: ["ptsd", "depression", "addiction"]
+  isPublic: boolean("isPublic").default(true).notNull(),
+  postCount: int("postCount").default(0).notNull(),
+  commentCount: int("commentCount").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  joinedAt: timestamp("joinedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MemberProfile = typeof memberProfiles.$inferSelect;
+export type InsertMemberProfile = typeof memberProfiles.$inferInsert;
+
+/**
+ * Community spaces - discussion areas
+ */
+export const communitySpaces = mysqlTable("community_spaces", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  description: text("description"),
+  icon: varchar("icon", { length: 50 }).default("💬"),
+  color: varchar("color", { length: 20 }).default("#8B5CF6"),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  postCount: int("postCount").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CommunitySpace = typeof communitySpaces.$inferSelect;
+export type InsertCommunitySpace = typeof communitySpaces.$inferInsert;
+
+/**
+ * Community posts - user discussions
+ */
+export const communityPosts = mysqlTable("community_posts", {
+  id: int("id").autoincrement().primaryKey(),
+  spaceId: int("spaceId").notNull(),
+  authorId: int("authorId").notNull(), // References memberProfiles.id
+  title: varchar("title", { length: 255 }).notNull(),
+  content: text("content").notNull(),
+  isAnonymous: boolean("isAnonymous").default(false),
+  isPinned: boolean("isPinned").default(false),
+  likeCount: int("likeCount").default(0),
+  commentCount: int("commentCount").default(0),
+  viewCount: int("viewCount").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CommunityPost = typeof communityPosts.$inferSelect;
+export type InsertCommunityPost = typeof communityPosts.$inferInsert;
+
+/**
+ * Post comments - replies to posts
+ */
+export const postComments = mysqlTable("post_comments", {
+  id: int("id").autoincrement().primaryKey(),
+  postId: int("postId").notNull(),
+  authorId: int("authorId").notNull(), // References memberProfiles.id
+  content: text("content").notNull(),
+  isAnonymous: boolean("isAnonymous").default(false),
+  likeCount: int("likeCount").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PostComment = typeof postComments.$inferSelect;
+export type InsertPostComment = typeof postComments.$inferInsert;
+
+
+/**
+ * Post likes - tracks likes on posts and comments
+ */
+export const postLikes = mysqlTable("post_likes", {
+  id: int("id").autoincrement().primaryKey(),
+  profileId: int("profileId").notNull(),
+  postId: int("postId"),
+  commentId: int("commentId"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PostLike = typeof postLikes.$inferSelect;
+export type InsertPostLike = typeof postLikes.$inferInsert;

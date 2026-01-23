@@ -1,0 +1,52 @@
+{
+  "query": "SELECT id, name, slug, sortOrder FROM community_spaces;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SELECT id, name, slug, sortOrder FROM community_spaces;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Introductions",
+      "slug": "introductions",
+      "sortOrder": "1"
+    },
+    {
+      "id": "2",
+      "name": "Microdosing Journey",
+      "slug": "microdosing",
+      "sortOrder": "2"
+    },
+    {
+      "id": "3",
+      "name": "Amanita Experiences",
+      "slug": "amanita",
+      "sortOrder": "3"
+    },
+    {
+      "id": "4",
+      "name": "Psilocybin Stories",
+      "slug": "psilocybin",
+      "sortOrder": "4"
+    },
+    {
+      "id": "5",
+      "name": "Recovery & Healing",
+      "slug": "recovery",
+      "sortOrder": "5"
+    },
+    {
+      "id": "6",
+      "name": "Integration",
+      "slug": "integration",
+      "sortOrder": "6"
+    },
+    {
+      "id": "7",
+      "name": "Questions & Answers",
+      "slug": "questions",
+      "sortOrder": "7"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tslug\tsortOrder\n1\tIntroductions\tintroductions\t1\n2\tMicrodosing Journey\tmicrodosing\t2\n3\tAmanita Experiences\tamanita\t3\n4\tPsilocybin Stories\tpsilocybin\t4\n5\tRecovery & Healing\trecovery\t5\n6\tIntegration\tintegration\t6\n7\tQuestions & Answers\tquestions\t7\n",
+  "stderr": "",
+  "execution_time_ms": 1538
+}

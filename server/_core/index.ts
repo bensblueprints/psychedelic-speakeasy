@@ -9,6 +9,7 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import klaviyoRouter from "../klaviyo";
 import seedRouter from "../seed-blogs-api";
+import seedCommunityRouter from "../seed-community-api";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -41,6 +42,7 @@ async function startServer() {
   app.use("/api/klaviyo", klaviyoRouter);
   // Seed API (for initial data population)
   app.use("/api", seedRouter);
+  app.use(seedCommunityRouter);
   // tRPC API
   app.use(
     "/api/trpc",

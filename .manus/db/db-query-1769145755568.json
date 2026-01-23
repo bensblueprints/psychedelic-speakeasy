@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS avatarIcon VARCHAR(50) DEFAULT 'mushroom-1'; ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS avatarColor VARCHAR(20) DEFAULT '#8B5CF6'; ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS journeyStage VARCHAR(50) DEFAULT 'researching'; ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS joinReasons TEXT; ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS isPublic BOOLEAN NOT NULL DEFAULT true;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS avatarIcon VARCHAR(50) DEFAULT 'mushroom-1'; ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS avatarColor VARCHAR(20) DEFAULT '#8B5CF6'; ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS journeyStage VARCHAR(50) DEFAULT 'researching'; ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS joinReasons TEXT; ALTER TABLE member_profiles ADD COLUMN IF NOT EXISTS isPublic BOOLEAN NOT NULL DEFAULT true;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2330
+}

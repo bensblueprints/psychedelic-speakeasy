@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "b5c166b8-a6ad-450f-b386-6872b26a1579",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "b03365d2-5150-4ebe-a0c4-9b22fb933031",
+  "prevId": "b1a8a58e-abfe-49ed-8678-4c436fc73d2f",
   "tables": {
     "blog_posts": {
       "name": "blog_posts",
@@ -178,9 +178,9 @@
         },
         "title": {
           "name": "title",
-          "type": "varchar(300)",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "content": {
@@ -194,7 +194,7 @@
           "name": "isAnonymous",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": false
         },
@@ -202,7 +202,7 @@
           "name": "isPinned",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": false
         },
@@ -210,7 +210,7 @@
           "name": "likeCount",
           "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": 0
         },
@@ -218,7 +218,7 @@
           "name": "commentCount",
           "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": 0
         },
@@ -226,7 +226,7 @@
           "name": "viewCount",
           "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": 0
         },
@@ -292,29 +292,21 @@
           "notNull": false,
           "autoincrement": false
         },
-        "color": {
-          "name": "color",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'#8B5CF6'"
-        },
         "icon": {
           "name": "icon",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
-          "default": "'message-circle'"
+          "default": "'💬'"
         },
-        "isDefault": {
-          "name": "isDefault",
-          "type": "boolean",
+        "color": {
+          "name": "color",
+          "type": "varchar(20)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
-          "default": false
+          "default": "'#8B5CF6'"
         },
         "sortOrder": {
           "name": "sortOrder",
@@ -323,6 +315,14 @@
           "notNull": true,
           "autoincrement": false,
           "default": 0
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
         },
         "postCount": {
           "name": "postCount",
@@ -498,7 +498,7 @@
           "name": "journeyStage",
           "type": "enum('researching','preparing','started','experienced','guide')",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": "'researching'"
         },
@@ -517,8 +517,32 @@
           "autoincrement": false,
           "default": true
         },
+        "postCount": {
+          "name": "postCount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "commentCount": {
+          "name": "commentCount",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
         "createdAt": {
           "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "joinedAt": {
+          "name": "joinedAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
@@ -671,13 +695,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "parentId": {
-          "name": "parentId",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "content": {
           "name": "content",
           "type": "text",
@@ -689,7 +706,7 @@
           "name": "isAnonymous",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": false
         },
@@ -697,7 +714,7 @@
           "name": "likeCount",
           "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": 0
         },
@@ -742,6 +759,13 @@
           "notNull": true,
           "autoincrement": true
         },
+        "profileId": {
+          "name": "profileId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "postId": {
           "name": "postId",
           "type": "int",
@@ -754,13 +778,6 @@
           "type": "int",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
-        },
-        "profileId": {
-          "name": "profileId",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
           "autoincrement": false
         },
         "createdAt": {

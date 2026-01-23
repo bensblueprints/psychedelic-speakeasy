@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS color VARCHAR(20) DEFAULT '#8B5CF6'; ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS icon VARCHAR(50) DEFAULT 'message-circle'; ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS sortOrder INT DEFAULT 0; ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS isDefault BOOLEAN DEFAULT false; ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS postCount INT DEFAULT 0; ALTER TABLE post_comments ADD COLUMN IF NOT EXISTS isAnonymous BOOLEAN NOT NULL DEFAULT false; ALTER TABLE post_comments ADD COLUMN IF NOT EXISTS likeCount INT NOT NULL DEFAULT 0;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS color VARCHAR(20) DEFAULT '#8B5CF6'; ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS icon VARCHAR(50) DEFAULT 'message-circle'; ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS sortOrder INT DEFAULT 0; ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS isDefault BOOLEAN DEFAULT false; ALTER TABLE community_spaces ADD COLUMN IF NOT EXISTS postCount INT DEFAULT 0; ALTER TABLE post_comments ADD COLUMN IF NOT EXISTS isAnonymous BOOLEAN NOT NULL DEFAULT false; ALTER TABLE post_comments ADD COLUMN IF NOT EXISTS likeCount INT NOT NULL DEFAULT 0;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 3511
+}

@@ -1,0 +1,31 @@
+{
+  "query": "SHOW CREATE TABLE member_profiles;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute SHOW CREATE TABLE member_profiles;",
+  "rows": [
+    {
+      "Table": "member_profiles",
+      "Create Table": "CREATE TABLE `member_profiles` ("
+    }
+  ],
+  "messages": [
+    "  `id` int(11) NOT NULL AUTO_INCREMENT,",
+    "  `userId` int(11) NOT NULL,",
+    "  `displayName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `avatarIcon` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'mushroom-1',",
+    "  `avatarColor` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#8B5CF6',",
+    "  `bio` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `joinReasons` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `journeyStage` enum('researching','preparing','started','experienced','guide') COLLATE utf8mb4_unicode_ci DEFAULT 'researching',",
+    "  `isPublic` tinyint(1) NOT NULL DEFAULT '1',",
+    "  `postCount` int(11) NOT NULL DEFAULT '0',",
+    "  `commentCount` int(11) NOT NULL DEFAULT '0',",
+    "  `joinedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+    "  `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,",
+    "  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,",
+    "  UNIQUE KEY `member_profiles_userId_unique` (`userId`)",
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+  ],
+  "stdout": "Table\tCreate Table\nmember_profiles\tCREATE TABLE `member_profiles` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `userId` int(11) NOT NULL,\n  `displayName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `avatarIcon` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'mushroom-1',\n  `avatarColor` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#8B5CF6',\n  `bio` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `joinReasons` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `journeyStage` enum('researching','preparing','started','experienced','guide') COLLATE utf8mb4_unicode_ci DEFAULT 'researching',\n  `isPublic` tinyint(1) NOT NULL DEFAULT '1',\n  `postCount` int(11) NOT NULL DEFAULT '0',\n  `commentCount` int(11) NOT NULL DEFAULT '0',\n  `joinedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,\n  UNIQUE KEY `member_profiles_userId_unique` (`userId`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci\n",
+  "stderr": "",
+  "execution_time_ms": 1511
+}

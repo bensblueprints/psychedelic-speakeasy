@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { getLoginUrl } from "@/const";
 import { 
   Shield, 
   Users, 
@@ -10,8 +12,10 @@ import {
   CheckCircle, 
   AlertTriangle,
   Play,
-  ChevronDown
+  ChevronDown,
+  LogIn
 } from "lucide-react";
+import { Link } from "wouter";
 
 /*
  * DESIGN: "The Underground Press" - Gonzo Journalism Revival
@@ -29,6 +33,7 @@ import {
  */
 
 export default function Home() {
+  const { user, isAuthenticated } = useAuth();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -55,8 +60,24 @@ export default function Home() {
             <div className="text-xs font-typewriter text-muted-foreground uppercase tracking-widest">
               Vol. MMXXVI • No. 47
             </div>
-            <div className="text-xs font-typewriter text-muted-foreground uppercase tracking-widest">
-              January 23, 2026
+            <div className="flex items-center gap-4">
+              {isAuthenticated ? (
+                <Link href="/dashboard">
+                  <Button variant="outline" size="sm" className="font-typewriter text-xs">
+                    MEMBER AREA
+                  </Button>
+                </Link>
+              ) : (
+                <a href={getLoginUrl()}>
+                  <Button variant="outline" size="sm" className="font-typewriter text-xs">
+                    <LogIn className="w-3 h-3 mr-2" />
+                    MEMBER LOGIN
+                  </Button>
+                </a>
+              )}
+              <div className="text-xs font-typewriter text-muted-foreground uppercase tracking-widest hidden sm:block">
+                January 23, 2026
+              </div>
             </div>
           </div>
           <div className="text-center py-6 border-y border-border my-4">
@@ -70,9 +91,9 @@ export default function Home() {
           <div className="flex items-center justify-center gap-8 text-xs font-typewriter text-muted-foreground">
             <span>INVESTIGATIVE REPORT</span>
             <span className="text-primary">•</span>
-            <span>MEMBERS ONLY</span>
+            <Link href="/blog" className="hover:text-primary transition-colors">ARTICLES</Link>
             <span className="text-primary">•</span>
-            <span>CLASSIFIED</span>
+            <span>MEMBERS ONLY</span>
           </div>
         </div>
       </header>
@@ -551,44 +572,64 @@ export default function Home() {
             </div>
 
             <h3 className="text-3xl md:text-4xl font-headline mb-6">
-              Request Your Invitation to<br />
-              <span className="text-primary">The Psychedelic Speakeasy</span>
+              Join <span className="text-primary">The Psychedelic Speakeasy</span>
             </h3>
 
-            <p className="text-lg text-muted-foreground mb-8">
-              To maintain the integrity and safety of our community, access is by invitation only. 
-              Enter your email below to submit your application. If approved, you'll receive your 
-              private access link within 24 hours.
+            <p className="text-lg text-muted-foreground mb-4">
+              Get instant access to our private community, vetted vendors, and exclusive content for just
+            </p>
+            
+            <div className="text-5xl md:text-6xl font-headline text-primary mb-2">
+              $97<span className="text-2xl text-muted-foreground">/year</span>
+            </div>
+            
+            <p className="text-sm text-muted-foreground mb-8">
+              That's less than $8/month for life-changing access
             </p>
 
             <div className="bg-background/50 border border-border rounded-lg p-6 md:p-8 mb-8">
               <p className="text-sm text-accent mb-6 font-typewriter">
-                ✦ BONUS: Approved members also receive our free guide: 
+                ✦ BONUS: Members also receive our free guide: 
                 <span className="font-bold"> "The Beginner's Guide to Safe & Effective Microdosing"</span>
               </p>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Input
-                    type="email"
-                    placeholder="Enter your primary email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="flex-1 bg-input border-border text-foreground placeholder:text-muted-foreground h-12 font-body"
-                    required
-                  />
+              {isAuthenticated ? (
+                <Link href="/join">
                   <Button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-sm tracking-wide"
+                    className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide w-full sm:w-auto"
                   >
-                    {isSubmitting ? "SUBMITTING..." : "REQUEST MY INVITATION"}
+                    BECOME A MEMBER - $97/YEAR
                   </Button>
+                </Link>
+              ) : (
+                <div className="space-y-4">
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <Input
+                        type="email"
+                        placeholder="Enter your email to get started"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="flex-1 bg-input border-border text-foreground placeholder:text-muted-foreground h-12 font-body"
+                        required
+                      />
+                      <Button 
+                        type="submit" 
+                        disabled={isSubmitting}
+                        className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-sm tracking-wide"
+                      >
+                        {isSubmitting ? "SUBMITTING..." : "GET ACCESS"}
+                      </Button>
+                    </div>
+                  </form>
+                  <p className="text-sm text-muted-foreground">
+                    Or <a href={getLoginUrl()} className="text-primary hover:underline">login</a> if you already have an account
+                  </p>
                 </div>
-              </form>
+              )}
 
               <p className="text-xs text-muted-foreground mt-4 font-typewriter">
-                🔒 Your information is 100% secure and will never be shared.
+                🔒 Secure checkout. Cancel anytime.
               </p>
             </div>
 
@@ -684,17 +725,23 @@ export default function Home() {
               Don't spend another day trapped in the cycle of suffering. Join thousands of others 
               who have found hope, healing, and transformation through the Psychedelic Speakeasy.
             </p>
-            <Button 
-              onClick={() => {
-                document.querySelector('input[type="email"]')?.scrollIntoView({ 
-                  behavior: 'smooth', 
-                  block: 'center' 
-                });
-              }}
-              className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide"
-            >
-              REQUEST YOUR INVITATION NOW
-            </Button>
+            {isAuthenticated ? (
+              <Link href="/join">
+                <Button 
+                  className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide"
+                >
+                  BECOME A MEMBER - $97/YEAR
+                </Button>
+              </Link>
+            ) : (
+              <a href={getLoginUrl()}>
+                <Button 
+                  className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide"
+                >
+                  JOIN NOW - $97/YEAR
+                </Button>
+              </a>
+            )}
           </motion.div>
         </div>
       </section>

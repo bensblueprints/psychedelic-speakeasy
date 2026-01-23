@@ -175,3 +175,99 @@ export const postLikes = mysqlTable("post_likes", {
 
 export type PostLike = typeof postLikes.$inferSelect;
 export type InsertPostLike = typeof postLikes.$inferInsert;
+
+
+/**
+ * Vendor categories - for organizing vetted vendors
+ */
+export const vendorCategories = mysqlTable("vendor_categories", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  description: text("description"),
+  icon: varchar("icon", { length: 50 }).default("🏪"),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type VendorCategory = typeof vendorCategories.$inferSelect;
+export type InsertVendorCategory = typeof vendorCategories.$inferInsert;
+
+/**
+ * Vetted vendors - trusted suppliers
+ */
+export const vendors = mysqlTable("vendors", {
+  id: int("id").autoincrement().primaryKey(),
+  categoryId: int("categoryId").notNull(),
+  name: varchar("name", { length: 200 }).notNull(),
+  slug: varchar("slug", { length: 200 }).notNull().unique(),
+  description: text("description"),
+  longDescription: text("longDescription"),
+  logo: varchar("logo", { length: 500 }),
+  website: varchar("website", { length: 500 }),
+  telegram: varchar("telegram", { length: 200 }),
+  email: varchar("email", { length: 320 }),
+  phone: varchar("phone", { length: 50 }),
+  discord: varchar("discord", { length: 200 }),
+  instagram: varchar("instagram", { length: 200 }),
+  location: varchar("location", { length: 200 }),
+  specialties: text("specialties"), // JSON array of specialties
+  verificationStatus: mysqlEnum("verificationStatus", ["pending", "verified", "featured", "suspended"]).default("pending").notNull(),
+  verificationNotes: text("verificationNotes"),
+  rating: int("rating").default(0), // 0-5 stars
+  reviewCount: int("reviewCount").default(0),
+  isPremiumOnly: boolean("isPremiumOnly").default(true).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Vendor = typeof vendors.$inferSelect;
+export type InsertVendor = typeof vendors.$inferInsert;
+
+/**
+ * Resource categories - for organizing trusted resources
+ */
+export const resourceCategories = mysqlTable("resource_categories", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  description: text("description"),
+  icon: varchar("icon", { length: 50 }).default("📚"),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ResourceCategory = typeof resourceCategories.$inferSelect;
+export type InsertResourceCategory = typeof resourceCategories.$inferInsert;
+
+/**
+ * Trusted resources - guides, books, links
+ */
+export const resources = mysqlTable("resources", {
+  id: int("id").autoincrement().primaryKey(),
+  categoryId: int("categoryId").notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  slug: varchar("slug", { length: 300 }).notNull().unique(),
+  description: text("description"),
+  longDescription: text("longDescription"),
+  resourceType: mysqlEnum("resourceType", ["book", "guide", "video", "podcast", "website", "course", "tool", "other"]).default("other").notNull(),
+  url: varchar("url", { length: 500 }),
+  affiliateUrl: varchar("affiliateUrl", { length: 500 }),
+  author: varchar("author", { length: 200 }),
+  image: varchar("image", { length: 500 }),
+  isPremiumOnly: boolean("isPremiumOnly").default(false).notNull(),
+  isFeatured: boolean("isFeatured").default(false).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Resource = typeof resources.$inferSelect;
+export type InsertResource = typeof resources.$inferInsert;

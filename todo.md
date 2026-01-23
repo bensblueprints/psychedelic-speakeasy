@@ -23,10 +23,10 @@
 ## Phase 5: Automation
 - [x] Set up daily blog publishing cron job
 
-## Phase 6: Opt-in Page & Klaviyo
+## Phase 6: Opt-in Page & SendLane
 - [x] Create mini opt-in page with key points from home page
-- [x] Set up Klaviyo API integration for email capture
-- [ ] Add Klaviyo API key secret configuration (user to provide)
+- [x] Set up SendLane API integration for email capture
+- [ ] Add SendLane API key secret configuration (user to provide)
 
 ## Phase 7: Blog Fixes & Enhancements
 - [x] Seed blog posts into database (15 posts seeded)
@@ -37,10 +37,14 @@
 - [x] Add strong CTA at end of each blog post
 - [ ] Rewrite blog posts as longer mini sales pages (skipped per user request)
 
-
 ## Phase 8: Opt-in Page Improvements
 - [x] Move email collection form above the fold on /optin page
 
+## Phase 9: Community Platform
+- [x] Create member profiles with anonymous icons
+- [x] Create community spaces for different topics
+- [x] Create posts and comments system
+- [ ] Generate 100 seed users with dialogue (skipped per user request)
 
 ## Phase 10: Community CRUD Fixes
 - [x] Fix profile creation functionality
@@ -48,3 +52,14 @@
 - [x] Add post editing functionality
 - [x] Add post deletion functionality
 - [x] Create default community spaces
+
+## Phase 11: Admin Dashboard & Vendor Management
+- [x] Create vendors database table with categories, contact details (Telegram, website, email)
+- [x] Create trusted resources database table with categories and links
+- [x] Create vendor categories and resource categories tables
+- [x] Build admin vendor management UI (add/edit/delete vendors)
+- [x] Build admin resource management UI (add/edit/delete resources)
+- [x] Build admin blog article management UI (create/edit/delete posts)
+- [ ] Build admin member management UI (grant/revoke premium access)
+- [x] Create member-facing vendors page with contact details
+- [x] Create member-facing trusted resources page

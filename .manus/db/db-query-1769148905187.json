@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO resource_categories (name, slug, description, icon, sortOrder) VALUES\n('Books', 'books', 'Essential reading for psychedelic education', '📚', 1),\n('Guides', 'guides', 'Step-by-step guides and protocols', '📋', 2),\n('Videos', 'videos', 'Educational videos and documentaries', '🎬', 3),\n('Podcasts', 'podcasts', 'Recommended podcasts and audio content', '🎧', 4),\n('Research', 'research', 'Scientific studies and clinical trials', '🔬', 5),\n('Tools', 'tools', 'Apps and tools for tracking and integration', '🛠️', 6),\n('Courses', 'courses', 'Online courses and educational programs', '🎓', 7);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute INSERT INTO resource_categories (name, slug, description, icon, sortOrder) VALUES\n('Books', 'books', 'Essential reading for psychedelic education', '📚', 1),\n('Guides', 'guides', 'Step-by-step guides and protocols', '📋', 2),\n('Videos', 'videos', 'Educational videos and documentaries', '🎬', 3),\n('Podcasts', 'podcasts', 'Recommended podcasts and audio content', '🎧', 4),\n('Research', 'research', 'Scientific studies and clinical trials', '🔬', 5),\n('Tools', 'tools', 'Apps and tools for tracking and integration', '🛠️', 6),\n('Courses', 'courses', 'Online courses and educational programs', '🎓', 7);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1549
+}

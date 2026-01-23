@@ -7,12 +7,15 @@ import {
   Users, 
   Calendar,
   ExternalLink,
-  Star,
   CheckCircle,
   Lock,
   Loader2,
   LogOut,
-  Settings
+  Settings,
+  Globe,
+  MessageCircle,
+  Mail,
+  Phone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -28,15 +31,17 @@ export default function Dashboard() {
     { enabled: isAuthenticated }
   );
   
-  const { data: vendors, isLoading: vendorsLoading } = trpc.members.vendors.useQuery(
+  // Fetch vendors from the new API
+  const { data: vendors, isLoading: vendorsLoading } = trpc.vendors.verified.useQuery(
     undefined,
     { enabled: membershipStatus?.hasMembership }
   );
   
-  const { data: guides, isLoading: guidesLoading } = trpc.members.guides.useQuery(
-    undefined,
-    { enabled: membershipStatus?.hasMembership }
-  );
+  // Fetch vendor categories
+  const { data: vendorCategories } = trpc.vendorCategories.list.useQuery();
+  
+  // Fetch resources (guides)
+  const { data: resources, isLoading: resourcesLoading } = trpc.resources.featured.useQuery();
 
   const handleLogout = async () => {
     await logout();
@@ -77,6 +82,16 @@ export default function Dashboard() {
       </div>
     );
   }
+
+  // Group vendors by category
+  const vendorsByCategory = vendors?.reduce((acc, vendor) => {
+    const categoryId = vendor.categoryId;
+    if (!acc[categoryId]) {
+      acc[categoryId] = [];
+    }
+    acc[categoryId].push(vendor);
+    return acc;
+  }, {} as Record<number, typeof vendors>) || {};
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -142,9 +157,9 @@ export default function Dashboard() {
                   <Shield className="w-4 h-4 mr-2" />
                   VETTED VENDORS
                 </TabsTrigger>
-                <TabsTrigger value="guides" className="font-typewriter text-xs">
+                <TabsTrigger value="resources" className="font-typewriter text-xs">
                   <BookOpen className="w-4 h-4 mr-2" />
-                  GUIDES
+                  RESOURCES
                 </TabsTrigger>
                 <TabsTrigger value="community" className="font-typewriter text-xs">
                   <Users className="w-4 h-4 mr-2" />
@@ -163,91 +178,109 @@ export default function Dashboard() {
                     <div className="flex justify-center py-12">
                       <Loader2 className="w-8 h-8 animate-spin text-primary" />
                     </div>
-                  ) : (
+                  ) : vendors && vendors.length > 0 ? (
                     <>
-                      {/* Amanita Vendors */}
-                      <div>
-                        <h3 className="text-xl font-headline mb-4 flex items-center gap-2">
-                          <span className="inline-block bg-primary/20 text-primary px-3 py-1 text-xs font-typewriter">
-                            AMANITA MUSCARIA
-                          </span>
-                          Vetted Suppliers
-                        </h3>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {vendors?.amanita.map((vendor, index) => (
-                            <div key={index} className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
-                              <div className="flex items-start justify-between mb-2">
-                                <h4 className="font-headline">{vendor.name}</h4>
-                                {vendor.verified && (
-                                  <CheckCircle className="w-5 h-5 text-green-500" />
-                                )}
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-3">{vendor.specialty}</p>
-                              <div className="flex items-center gap-1 text-sm">
-                                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                                <span>{vendor.rating}</span>
-                              </div>
+                      {vendorCategories?.map((category) => {
+                        const categoryVendors = vendorsByCategory[category.id] || [];
+                        if (categoryVendors.length === 0) return null;
+                        
+                        return (
+                          <div key={category.id}>
+                            <h3 className="text-xl font-headline mb-4 flex items-center gap-2">
+                              <span className="inline-block bg-primary/20 text-primary px-3 py-1 text-xs font-typewriter">
+                                {category.icon} {category.name.toUpperCase()}
+                              </span>
+                              Vetted Suppliers
+                            </h3>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {categoryVendors.map((vendor) => (
+                                <Link key={vendor.id} href={`/vendors/${vendor.slug}`}>
+                                  <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors cursor-pointer h-full">
+                                    <div className="flex items-start justify-between mb-2">
+                                      <h4 className="font-headline">{vendor.name}</h4>
+                                      {(vendor.verificationStatus === 'verified' || vendor.verificationStatus === 'featured') && (
+                                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                                      )}
+                                    </div>
+                                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                                      {vendor.description || vendor.specialties}
+                                    </p>
+                                    <div className="flex flex-wrap gap-2 mt-auto">
+                                      {vendor.website && (
+                                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                                          <Globe className="w-3 h-3" /> Website
+                                        </span>
+                                      )}
+                                      {vendor.telegram && (
+                                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                                          <MessageCircle className="w-3 h-3" /> Telegram
+                                        </span>
+                                      )}
+                                      {vendor.email && (
+                                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                                          <Mail className="w-3 h-3" /> Email
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Psilocybin Vendors */}
-                      <div>
-                        <h3 className="text-xl font-headline mb-4 flex items-center gap-2">
-                          <span className="inline-block bg-accent/20 text-accent-foreground px-3 py-1 text-xs font-typewriter">
-                            PSILOCYBIN
-                          </span>
-                          Trusted Resources
-                        </h3>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {vendors?.psilocybin.map((vendor, index) => (
-                            <div key={index} className="bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-colors">
-                              <div className="flex items-start justify-between mb-2">
-                                <h4 className="font-headline">{vendor.name}</h4>
-                                {vendor.verified && (
-                                  <CheckCircle className="w-5 h-5 text-green-500" />
-                                )}
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-3">{vendor.specialty}</p>
-                              <div className="flex items-center gap-1 text-sm">
-                                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                                <span>{vendor.rating}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                          </div>
+                        );
+                      })}
                     </>
+                  ) : (
+                    <div className="text-center py-12 text-muted-foreground">
+                      <Shield className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p>No vendors available yet. Check back soon!</p>
+                    </div>
                   )}
                 </motion.div>
               </TabsContent>
 
-              {/* Guides Tab */}
-              <TabsContent value="guides">
+              {/* Resources Tab */}
+              <TabsContent value="resources">
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  {guidesLoading ? (
+                  {resourcesLoading ? (
                     <div className="flex justify-center py-12">
                       <Loader2 className="w-8 h-8 animate-spin text-primary" />
                     </div>
-                  ) : (
+                  ) : resources && resources.length > 0 ? (
                     <div className="grid md:grid-cols-2 gap-4">
-                      {guides?.map((guide) => (
-                        <div key={guide.id} className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors cursor-pointer">
+                      {resources.map((resource) => (
+                        <a 
+                          key={resource.id} 
+                          href={resource.affiliateUrl || resource.url || '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 transition-colors cursor-pointer block"
+                        >
                           <span className="inline-block bg-primary/20 text-primary px-2 py-0.5 text-xs font-typewriter mb-3">
-                            {guide.category.toUpperCase()}
+                            {resource.resourceType.toUpperCase()}
                           </span>
-                          <h4 className="font-headline text-lg mb-2">{guide.title}</h4>
+                          <h4 className="font-headline text-lg mb-2">{resource.title}</h4>
+                          {resource.author && (
+                            <p className="text-sm text-muted-foreground mb-2">by {resource.author}</p>
+                          )}
+                          {resource.description && (
+                            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{resource.description}</p>
+                          )}
                           <div className="flex items-center gap-2 text-sm text-primary">
                             <BookOpen className="w-4 h-4" />
-                            Read Guide
+                            View Resource
                             <ExternalLink className="w-3 h-3" />
                           </div>
-                        </div>
+                        </a>
                       ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 text-muted-foreground">
+                      <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p>No resources available yet. Check back soon!</p>
                     </div>
                   )}
                 </motion.div>
@@ -266,11 +299,12 @@ export default function Dashboard() {
                       Connect with fellow members in our private community forums. Share experiences, 
                       ask questions, and support each other on your healing journey.
                     </p>
-                    <Button variant="outline" className="font-typewriter">
-                      <Users className="w-4 h-4 mr-2" />
-                      ACCESS FORUMS
-                      <ExternalLink className="w-3 h-3 ml-2" />
-                    </Button>
+                    <Link href="/community">
+                      <Button variant="outline" className="font-typewriter">
+                        <Users className="w-4 h-4 mr-2" />
+                        ACCESS COMMUNITY
+                      </Button>
+                    </Link>
                   </div>
 
                   <div className="bg-card border border-border rounded-lg p-6">

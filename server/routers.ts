@@ -630,31 +630,304 @@ export const appRouter = router({
     }),
   }),
 
-  // Member-only content
+  // Vendor management procedures
+  vendorCategories: router({
+    list: publicProcedure.query(async () => {
+      return db.getVendorCategories();
+    }),
+    
+    adminList: adminProcedure.query(async () => {
+      return db.getAllVendorCategories();
+    }),
+    
+    create: adminProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        slug: z.string().min(1),
+        description: z.string().optional(),
+        icon: z.string().default("🏪"),
+        sortOrder: z.number().default(0),
+        isActive: z.boolean().default(true),
+      }))
+      .mutation(async ({ input }) => {
+        await db.createVendorCategory(input);
+        return { success: true };
+      }),
+    
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().min(1).optional(),
+        slug: z.string().min(1).optional(),
+        description: z.string().optional(),
+        icon: z.string().optional(),
+        sortOrder: z.number().optional(),
+        isActive: z.boolean().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...updates } = input;
+        await db.updateVendorCategory(id, updates);
+        return { success: true };
+      }),
+    
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await db.deleteVendorCategory(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Vendor procedures
+  vendors: router({
+    list: memberProcedure
+      .input(z.object({ categoryId: z.number().optional() }).optional())
+      .query(async ({ input }) => {
+        return db.getVendors(input?.categoryId);
+      }),
+    
+    featured: publicProcedure.query(async () => {
+      return db.getFeaturedVendors();
+    }),
+    
+    verified: memberProcedure.query(async () => {
+      return db.getVerifiedVendors();
+    }),
+    
+    bySlug: memberProcedure
+      .input(z.object({ slug: z.string() }))
+      .query(async ({ input }) => {
+        const vendor = await db.getVendorBySlug(input.slug);
+        if (!vendor) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Vendor not found' });
+        }
+        return vendor;
+      }),
+    
+    byId: memberProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        const vendor = await db.getVendorById(input.id);
+        if (!vendor) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Vendor not found' });
+        }
+        return vendor;
+      }),
+    
+    adminList: adminProcedure.query(async () => {
+      return db.getAllVendors();
+    }),
+    
+    create: adminProcedure
+      .input(z.object({
+        categoryId: z.number(),
+        name: z.string().min(1),
+        slug: z.string().min(1),
+        description: z.string().optional(),
+        longDescription: z.string().optional(),
+        logo: z.string().optional(),
+        website: z.string().optional(),
+        telegram: z.string().optional(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        discord: z.string().optional(),
+        instagram: z.string().optional(),
+        location: z.string().optional(),
+        specialties: z.string().optional(),
+        verificationStatus: z.enum(["pending", "verified", "featured", "suspended"]).default("pending"),
+        verificationNotes: z.string().optional(),
+        isPremiumOnly: z.boolean().default(true),
+        isActive: z.boolean().default(true),
+        sortOrder: z.number().default(0),
+      }))
+      .mutation(async ({ input }) => {
+        await db.createVendor(input);
+        return { success: true };
+      }),
+    
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        categoryId: z.number().optional(),
+        name: z.string().min(1).optional(),
+        slug: z.string().min(1).optional(),
+        description: z.string().optional(),
+        longDescription: z.string().optional(),
+        logo: z.string().optional(),
+        website: z.string().optional(),
+        telegram: z.string().optional(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        discord: z.string().optional(),
+        instagram: z.string().optional(),
+        location: z.string().optional(),
+        specialties: z.string().optional(),
+        verificationStatus: z.enum(["pending", "verified", "featured", "suspended"]).optional(),
+        verificationNotes: z.string().optional(),
+        isPremiumOnly: z.boolean().optional(),
+        isActive: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...updates } = input;
+        await db.updateVendor(id, updates);
+        return { success: true };
+      }),
+    
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await db.deleteVendor(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Resource category procedures
+  resourceCategories: router({
+    list: publicProcedure.query(async () => {
+      return db.getResourceCategories();
+    }),
+    
+    adminList: adminProcedure.query(async () => {
+      return db.getAllResourceCategories();
+    }),
+    
+    create: adminProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        slug: z.string().min(1),
+        description: z.string().optional(),
+        icon: z.string().default("📚"),
+        sortOrder: z.number().default(0),
+        isActive: z.boolean().default(true),
+      }))
+      .mutation(async ({ input }) => {
+        await db.createResourceCategory(input);
+        return { success: true };
+      }),
+    
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().min(1).optional(),
+        slug: z.string().min(1).optional(),
+        description: z.string().optional(),
+        icon: z.string().optional(),
+        sortOrder: z.number().optional(),
+        isActive: z.boolean().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...updates } = input;
+        await db.updateResourceCategory(id, updates);
+        return { success: true };
+      }),
+    
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await db.deleteResourceCategory(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Resource procedures
+  resources: router({
+    list: publicProcedure
+      .input(z.object({ categoryId: z.number().optional() }).optional())
+      .query(async ({ input }) => {
+        return db.getResources(input?.categoryId);
+      }),
+    
+    featured: publicProcedure.query(async () => {
+      return db.getFeaturedResources();
+    }),
+    
+    bySlug: publicProcedure
+      .input(z.object({ slug: z.string() }))
+      .query(async ({ input }) => {
+        const resource = await db.getResourceBySlug(input.slug);
+        if (!resource) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Resource not found' });
+        }
+        return resource;
+      }),
+    
+    byId: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        const resource = await db.getResourceById(input.id);
+        if (!resource) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Resource not found' });
+        }
+        return resource;
+      }),
+    
+    adminList: adminProcedure.query(async () => {
+      return db.getAllResources();
+    }),
+    
+    create: adminProcedure
+      .input(z.object({
+        categoryId: z.number(),
+        title: z.string().min(1),
+        slug: z.string().min(1),
+        description: z.string().optional(),
+        longDescription: z.string().optional(),
+        resourceType: z.enum(["book", "guide", "video", "podcast", "website", "course", "tool", "other"]).default("other"),
+        url: z.string().optional(),
+        affiliateUrl: z.string().optional(),
+        author: z.string().optional(),
+        image: z.string().optional(),
+        isPremiumOnly: z.boolean().default(false),
+        isFeatured: z.boolean().default(false),
+        isActive: z.boolean().default(true),
+        sortOrder: z.number().default(0),
+      }))
+      .mutation(async ({ input }) => {
+        await db.createResource(input);
+        return { success: true };
+      }),
+    
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        categoryId: z.number().optional(),
+        title: z.string().min(1).optional(),
+        slug: z.string().min(1).optional(),
+        description: z.string().optional(),
+        longDescription: z.string().optional(),
+        resourceType: z.enum(["book", "guide", "video", "podcast", "website", "course", "tool", "other"]).optional(),
+        url: z.string().optional(),
+        affiliateUrl: z.string().optional(),
+        author: z.string().optional(),
+        image: z.string().optional(),
+        isPremiumOnly: z.boolean().optional(),
+        isFeatured: z.boolean().optional(),
+        isActive: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...updates } = input;
+        await db.updateResource(id, updates);
+        return { success: true };
+      }),
+    
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await db.deleteResource(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Member-only content (legacy - keeping for backwards compatibility)
   members: router({
     vendors: memberProcedure.query(async () => {
-      return {
-        amanita: [
-          { name: "Forest Wisdom Co.", rating: 4.9, verified: true, specialty: "Dried Amanita Muscaria caps" },
-          { name: "Northern Roots", rating: 4.8, verified: true, specialty: "Microdose preparations" },
-          { name: "Ancient Path Botanicals", rating: 4.7, verified: true, specialty: "Tinctures and extracts" },
-        ],
-        psilocybin: [
-          { name: "Sacred Spores", rating: 4.9, verified: true, specialty: "Cultivation supplies" },
-          { name: "Mycelium Masters", rating: 4.8, verified: true, specialty: "Grow kits" },
-          { name: "Fungi Friends", rating: 4.7, verified: true, specialty: "Educational resources" },
-        ],
-      };
+      return db.getVerifiedVendors();
     }),
     
     guides: memberProcedure.query(async () => {
-      return [
-        { id: 1, title: "The Beginner's Guide to Safe Microdosing", category: "Basics" },
-        { id: 2, title: "Amanita Muscaria: Preparation & Dosing", category: "Amanita" },
-        { id: 3, title: "Integration: Making Your Experience Last", category: "Integration" },
-        { id: 4, title: "Set & Setting: Creating Sacred Space", category: "Preparation" },
-        { id: 5, title: "Working with Psilocybin for Trauma", category: "Psilocybin" },
-      ];
+      return db.getFeaturedResources();
     }),
   }),
 });

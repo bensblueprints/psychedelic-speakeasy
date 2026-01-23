@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO vendor_categories (name, slug, description, icon, sortOrder) VALUES\n('Amanita Muscaria', 'amanita-muscaria', 'Vetted suppliers of Amanita Muscaria products', '🍄', 1),\n('Psilocybin', 'psilocybin', 'Trusted sources for psilocybin mushrooms and spores', '🔮', 2),\n('Microdosing Supplies', 'microdosing', 'Equipment and supplies for microdosing protocols', '⚗️', 3),\n('Growing Supplies', 'growing', 'Spores, substrates, and cultivation equipment', '🌱', 4),\n('Integration Services', 'integration', 'Therapists and guides for psychedelic integration', '🧘', 5),\n('Testing Services', 'testing', 'Lab testing and quality assurance services', '🔬', 6);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3m3D5MrqCAAiYaH.7eade5d3e49c --database gNzS4NBHx5vTrMncCSQSeJ --execute INSERT INTO vendor_categories (name, slug, description, icon, sortOrder) VALUES\n('Amanita Muscaria', 'amanita-muscaria', 'Vetted suppliers of Amanita Muscaria products', '🍄', 1),\n('Psilocybin', 'psilocybin', 'Trusted sources for psilocybin mushrooms and spores', '🔮', 2),\n('Microdosing Supplies', 'microdosing', 'Equipment and supplies for microdosing protocols', '⚗️', 3),\n('Growing Supplies', 'growing', 'Spores, substrates, and cultivation equipment', '🌱', 4),\n('Integration Services', 'integration', 'Therapists and guides for psychedelic integration', '🧘', 5),\n('Testing Services', 'testing', 'Lab testing and quality assurance services', '🔬', 6);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1564
+}

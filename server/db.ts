@@ -725,3 +725,324 @@ export async function bulkInsertPostComments(comments: InsertPostComment[]) {
   
   await db.insert(postComments).values(comments);
 }
+
+
+// ============ VENDOR QUERIES ============
+
+import { 
+  vendorCategories, 
+  InsertVendorCategory,
+  vendors,
+  InsertVendor,
+  resourceCategories,
+  InsertResourceCategory,
+  resources,
+  InsertResource
+} from "../drizzle/schema";
+
+export async function getVendorCategories() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(vendorCategories)
+    .where(eq(vendorCategories.isActive, true))
+    .orderBy(vendorCategories.sortOrder);
+}
+
+export async function getAllVendorCategories() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(vendorCategories)
+    .orderBy(vendorCategories.sortOrder);
+}
+
+export async function getVendorCategoryById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(vendorCategories)
+    .where(eq(vendorCategories.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createVendorCategory(category: InsertVendorCategory) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(vendorCategories).values(category);
+  return result;
+}
+
+export async function updateVendorCategory(id: number, updates: Partial<InsertVendorCategory>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(vendorCategories).set(updates).where(eq(vendorCategories.id, id));
+}
+
+export async function deleteVendorCategory(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(vendorCategories).where(eq(vendorCategories.id, id));
+}
+
+export async function getVendors(categoryId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (categoryId) {
+    return db
+      .select()
+      .from(vendors)
+      .where(and(eq(vendors.categoryId, categoryId), eq(vendors.isActive, true)))
+      .orderBy(vendors.sortOrder);
+  }
+  
+  return db
+    .select()
+    .from(vendors)
+    .where(eq(vendors.isActive, true))
+    .orderBy(vendors.sortOrder);
+}
+
+export async function getAllVendors() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(vendors)
+    .orderBy(vendors.sortOrder);
+}
+
+export async function getVendorById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(vendors)
+    .where(eq(vendors.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getVendorBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(vendors)
+    .where(eq(vendors.slug, slug))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createVendor(vendor: InsertVendor) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(vendors).values(vendor);
+  return result;
+}
+
+export async function updateVendor(id: number, updates: Partial<InsertVendor>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(vendors).set(updates).where(eq(vendors.id, id));
+}
+
+export async function deleteVendor(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(vendors).where(eq(vendors.id, id));
+}
+
+// ============ RESOURCE QUERIES ============
+
+export async function getResourceCategories() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(resourceCategories)
+    .where(eq(resourceCategories.isActive, true))
+    .orderBy(resourceCategories.sortOrder);
+}
+
+export async function getAllResourceCategories() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(resourceCategories)
+    .orderBy(resourceCategories.sortOrder);
+}
+
+export async function getResourceCategoryById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(resourceCategories)
+    .where(eq(resourceCategories.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createResourceCategory(category: InsertResourceCategory) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(resourceCategories).values(category);
+  return result;
+}
+
+export async function updateResourceCategory(id: number, updates: Partial<InsertResourceCategory>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(resourceCategories).set(updates).where(eq(resourceCategories.id, id));
+}
+
+export async function deleteResourceCategory(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(resourceCategories).where(eq(resourceCategories.id, id));
+}
+
+export async function getResources(categoryId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (categoryId) {
+    return db
+      .select()
+      .from(resources)
+      .where(and(eq(resources.categoryId, categoryId), eq(resources.isActive, true)))
+      .orderBy(resources.sortOrder);
+  }
+  
+  return db
+    .select()
+    .from(resources)
+    .where(eq(resources.isActive, true))
+    .orderBy(resources.sortOrder);
+}
+
+export async function getAllResources() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(resources)
+    .orderBy(resources.sortOrder);
+}
+
+export async function getResourceById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(resources)
+    .where(eq(resources.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getResourceBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db
+    .select()
+    .from(resources)
+    .where(eq(resources.slug, slug))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function createResource(resource: InsertResource) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(resources).values(resource);
+  return result;
+}
+
+export async function updateResource(id: number, updates: Partial<InsertResource>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(resources).set(updates).where(eq(resources.id, id));
+}
+
+export async function deleteResource(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(resources).where(eq(resources.id, id));
+}
+
+export async function getFeaturedResources() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(resources)
+    .where(and(eq(resources.isFeatured, true), eq(resources.isActive, true)))
+    .orderBy(resources.sortOrder);
+}
+
+export async function getVerifiedVendors() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(vendors)
+    .where(and(
+      eq(vendors.isActive, true),
+      sql`${vendors.verificationStatus} IN ('verified', 'featured')`
+    ))
+    .orderBy(vendors.sortOrder);
+}
+
+export async function getFeaturedVendors() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db
+    .select()
+    .from(vendors)
+    .where(and(
+      eq(vendors.isActive, true),
+      eq(vendors.verificationStatus, 'featured')
+    ))
+    .orderBy(vendors.sortOrder);
+}

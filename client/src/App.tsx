@@ -13,6 +13,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import OptIn from "./pages/OptIn";
 import Community from "./pages/Community";
 import PostDetail from "./pages/PostDetail";
+import VendorDetail from "./pages/VendorDetail";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
       <Route path={"/community"} component={Community} />
       <Route path={"/community/space/:slug"} component={Community} />
       <Route path={"/community/post/:id"} component={PostDetail} />
+      <Route path={"/vendors/:slug"} component={VendorDetail} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

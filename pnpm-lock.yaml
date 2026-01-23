@@ -16,6 +16,9 @@ importers:
 
   .:
     dependencies:
+      '@airwallex/components-sdk':
+        specifier: ^1.28.2
+        version: 1.28.2
       '@aws-sdk/client-s3':
         specifier: ^3.693.0
         version: 3.974.0
@@ -280,6 +283,12 @@ importers:
         version: 2.1.9(@types/node@24.7.0)(lightningcss@1.30.1)
 
 packages:
+
+  '@airwallex/airtracker@3.2.0':
+    resolution: {integrity: sha512-PKE5N38ajTVg6ph9JzLpWsICNjqLtf/wWudNVU3UPX9SVy2I5s5ITc281sMSD8+LIE6RJoGjGTO+VYP/io5kig==}
+
+  '@airwallex/components-sdk@1.28.2':
+    resolution: {integrity: sha512-LK8g/SLTuOhX+CPFRFwPf8Tx4H2LGjMSGZx5B9wbGVLLzE9ZnLCKgkBeG0LRvCF6E/DdI8+ybuU5d2AyInl6MA==}
 
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
@@ -4346,6 +4355,12 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
+
+  '@airwallex/airtracker@3.2.0': {}
+
+  '@airwallex/components-sdk@1.28.2':
+    dependencies:
+      '@airwallex/airtracker': 3.2.0
 
   '@antfu/install-pkg@1.1.0':
     dependencies:

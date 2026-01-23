@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { trpc } from "@/lib/trpc";
 import { Link, useLocation } from "wouter";
@@ -9,7 +9,8 @@ import {
   Lock, 
   ArrowLeft,
   CreditCard,
-  Loader2
+  Loader2,
+  Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -20,11 +21,21 @@ export default function Join() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
   const [, setLocation] = useLocation();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'airwallex'>('stripe');
+  const [airwallexConfigured, setAirwallexConfigured] = useState(false);
   
   const { data: membershipStatus, isLoading: statusLoading } = trpc.membership.status.useQuery(
     undefined,
     { enabled: isAuthenticated }
   );
+  
+  // Check if Airwallex is configured
+  useEffect(() => {
+    fetch('/api/airwallex/status')
+      .then(res => res.json())
+      .then(data => setAirwallexConfigured(data.configured))
+      .catch(() => setAirwallexConfigured(false));
+  }, []);
   
   const createMembership = trpc.membership.create.useMutation({
     onSuccess: () => {
@@ -76,11 +87,64 @@ export default function Join() {
     );
   }
 
-  const handlePayment = async () => {
+  const handleStripePayment = async () => {
     setIsProcessing(true);
     // For now, create membership directly (Stripe integration will be added later)
     // In production, this would redirect to Stripe Checkout
     createMembership.mutate({});
+  };
+
+  const handleAirwallexPayment = async () => {
+    setIsProcessing(true);
+    try {
+      const response = await fetch('/api/airwallex/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: 97,
+          currency: 'USD',
+          userId: user?.id,
+          userEmail: user?.email,
+          userName: user?.name,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create payment');
+      }
+
+      // Load Airwallex SDK and redirect to hosted payment page
+      const { init } = await import('@airwallex/components-sdk');
+      
+      const payment = await init({
+        env: 'demo', // Change to 'prod' for production
+        enabledElements: ['payments'],
+      });
+
+      // @ts-ignore - redirectToCheckout exists on the payment object
+      payment.redirectToCheckout({
+        intent_id: data.intentId,
+        client_secret: data.clientSecret,
+        currency: data.currency,
+        country_code: 'US',
+        successUrl: `${window.location.origin}/payment/success`,
+        failUrl: `${window.location.origin}/payment/failed`,
+      });
+    } catch (error: any) {
+      console.error('Airwallex payment error:', error);
+      toast.error(error.message || 'Payment failed. Please try again.');
+      setIsProcessing(false);
+    }
+  };
+
+  const handlePayment = () => {
+    if (paymentMethod === 'airwallex' && airwallexConfigured) {
+      handleAirwallexPayment();
+    } else {
+      handleStripePayment();
+    }
   };
 
   if (authLoading || statusLoading) {
@@ -128,10 +192,10 @@ export default function Join() {
                 SECURE CHECKOUT
               </div>
               <h2 className="text-3xl md:text-4xl font-headline mb-4">
-                Join The Psychedelic Speakeasy
+                Join The Underground
               </h2>
-              <p className="text-lg text-muted-foreground">
-                Get instant access to our private community, vetted vendors, and exclusive content.
+              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                Get instant access to vetted vendors, dosing guides, and a private community of fellow seekers.
               </p>
             </motion.div>
 
@@ -140,12 +204,13 @@ export default function Join() {
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                className="bg-card border border-border rounded-lg p-6 md:p-8"
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="bg-card border border-border rounded-lg p-8"
               >
-                <h3 className="text-xl font-headline mb-6">What You Get:</h3>
-                
-                <div className="space-y-4 mb-8">
+                <h3 className="text-xl font-headline mb-6 text-primary">
+                  WHAT YOU GET
+                </h3>
+                <div className="space-y-4">
                   {[
                     "Curated list of vetted Amanita Muscaria suppliers",
                     "Trusted psilocybin vendor recommendations",
@@ -168,43 +233,72 @@ export default function Join() {
                     { icon: Shield, label: "Vetted Vendors" },
                     { icon: Users, label: "Expert Community" },
                     { icon: Lock, label: "Private & Secure" },
-                  ].map((feature, index) => (
+                  ].map((item, index) => (
                     <div key={index} className="text-center">
-                      <feature.icon className="w-8 h-8 text-primary mx-auto mb-2" />
-                      <span className="text-xs text-muted-foreground font-typewriter">{feature.label}</span>
+                      <item.icon className="w-6 h-6 mx-auto mb-2 text-primary" />
+                      <span className="text-xs text-muted-foreground">{item.label}</span>
                     </div>
                   ))}
                 </div>
               </motion.div>
 
-              {/* Payment Box */}
+              {/* Payment Card */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-card border-2 border-primary rounded-lg p-6 md:p-8"
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="bg-card border-2 border-primary rounded-lg p-8"
               >
-                <div className="text-center mb-6">
-                  <p className="text-sm text-muted-foreground mb-2">Annual Membership</p>
+                <div className="text-center mb-8">
+                  <div className="text-sm text-muted-foreground mb-2 line-through">
+                    Regular Price: $297/year
+                  </div>
                   <div className="text-5xl font-headline text-primary mb-2">
                     $97
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    per year (less than $8/month)
-                  </p>
-                </div>
-
-                <div className="space-y-4 mb-6">
-                  <div className="bg-background/50 border border-border rounded p-4">
-                    <p className="text-sm text-muted-foreground mb-1">Logged in as:</p>
-                    <p className="font-medium">{user?.email || user?.name || "Member"}</p>
+                  <div className="text-muted-foreground">
+                    per year • Full Access
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-2">
+                    That's less than $8/month for life-changing access
                   </div>
                 </div>
 
-                <Button 
+                {/* Payment Method Selection */}
+                {airwallexConfigured && (
+                  <div className="mb-6">
+                    <p className="text-sm text-muted-foreground mb-3 text-center">Select payment method:</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        onClick={() => setPaymentMethod('stripe')}
+                        className={`p-3 rounded-lg border-2 transition-all flex items-center justify-center gap-2 ${
+                          paymentMethod === 'stripe' 
+                            ? 'border-primary bg-primary/10' 
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        <CreditCard className="w-4 h-4" />
+                        <span className="text-sm font-medium">Card</span>
+                      </button>
+                      <button
+                        onClick={() => setPaymentMethod('airwallex')}
+                        className={`p-3 rounded-lg border-2 transition-all flex items-center justify-center gap-2 ${
+                          paymentMethod === 'airwallex' 
+                            ? 'border-primary bg-primary/10' 
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        <Globe className="w-4 h-4" />
+                        <span className="text-sm font-medium">Global Pay</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <Button
                   onClick={handlePayment}
                   disabled={isProcessing}
-                  className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg py-6"
                 >
                   {isProcessing ? (
                     <>
@@ -214,25 +308,29 @@ export default function Join() {
                   ) : (
                     <>
                       <CreditCard className="w-5 h-5 mr-2" />
-                      COMPLETE PAYMENT - $97
+                      GET INSTANT ACCESS NOW
                     </>
                   )}
                 </Button>
 
-                <div className="mt-6 text-center">
-                  <p className="text-xs text-muted-foreground">
-                    🔒 Secure payment processing
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    By joining, you agree to our Terms of Service and Privacy Policy
+                <div className="mt-6 space-y-3 text-center text-xs text-muted-foreground">
+                  <div className="flex items-center justify-center gap-2">
+                    <Lock className="w-3 h-3" />
+                    <span>256-bit SSL Encrypted Payment</span>
+                  </div>
+                  <p>
+                    By joining, you agree to our Terms of Service and Privacy Policy.
+                    This is a private membership community.
                   </p>
                 </div>
 
-                <div className="mt-6 pt-6 border-t border-border">
-                  <p className="text-sm text-muted-foreground text-center">
-                    <strong className="text-foreground">30-Day Money Back Guarantee</strong>
+                <div className="mt-6 p-4 bg-muted/30 rounded-lg">
+                  <p className="text-sm text-center">
+                    <span className="text-primary font-bold">100% Satisfaction Guarantee</span>
                     <br />
-                    If you're not completely satisfied, we'll refund your membership.
+                    <span className="text-muted-foreground text-xs">
+                      If you're not completely satisfied within 30 days, we'll refund your membership in full.
+                    </span>
                   </p>
                 </div>
               </motion.div>
@@ -240,25 +338,23 @@ export default function Join() {
 
             {/* Trust Badges */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
               className="mt-12 text-center"
             >
-              <p className="text-xs text-muted-foreground font-typewriter mb-4">
-                TRUSTED BY THOUSANDS OF MEMBERS
-              </p>
+              <p className="text-xs text-muted-foreground mb-4">TRUSTED BY THOUSANDS OF SEEKERS</p>
               <div className="flex items-center justify-center gap-8 text-muted-foreground">
                 <div className="text-center">
-                  <div className="text-2xl font-headline text-foreground">2,500+</div>
+                  <div className="text-2xl font-headline text-primary">2,500+</div>
                   <div className="text-xs">Active Members</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-headline text-foreground">50+</div>
+                  <div className="text-2xl font-headline text-primary">50+</div>
                   <div className="text-xs">Vetted Vendors</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-headline text-foreground">4.9/5</div>
+                  <div className="text-2xl font-headline text-primary">4.9★</div>
                   <div className="text-xs">Member Rating</div>
                 </div>
               </div>
@@ -268,10 +364,13 @@ export default function Join() {
       </main>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-border">
+      <footer className="py-8 border-t border-border mt-auto">
         <div className="container">
           <div className="text-center text-xs text-muted-foreground font-typewriter">
             <p>© 2026 The Psychedelic Speakeasy. All Rights Reserved.</p>
+            <p className="mt-2">
+              This is a private membership community. All information is for educational purposes only.
+            </p>
           </div>
         </div>
       </footer>

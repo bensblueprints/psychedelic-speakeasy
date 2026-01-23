@@ -10,6 +10,7 @@ import { serveStatic, setupVite } from "./vite";
 import klaviyoRouter from "../klaviyo";
 import seedRouter from "../seed-blogs-api";
 import seedCommunityRouter from "../seed-community-api";
+import airwallexRouter from "../airwallex";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -43,6 +44,8 @@ async function startServer() {
   // Seed API (for initial data population)
   app.use("/api", seedRouter);
   app.use(seedCommunityRouter);
+  // Airwallex Payment API
+  app.use("/api/airwallex", airwallexRouter);
   // tRPC API
   app.use(
     "/api/trpc",

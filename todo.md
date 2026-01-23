@@ -63,3 +63,9 @@
 - [ ] Build admin member management UI (grant/revoke premium access)
 - [x] Create member-facing vendors page with contact details
 - [x] Create member-facing trusted resources page
+
+
+## Phase 12: Airwallex Payment Integration
+- [x] Set up Airwallex API configuration
+- [x] Create Airwallex payment checkout flow
+- [x] Add Airwallex API key to secrets configuration (ready for user to add keys)

@@ -36,3 +36,7 @@
 - [x] Add Amazon book recommendations section (mushroom hunting, identification guides)
 - [x] Add strong CTA at end of each blog post
 - [ ] Rewrite blog posts as longer mini sales pages (skipped per user request)
+
+
+## Phase 8: Opt-in Page Improvements
+- [x] Move email collection form above the fold on /optin page

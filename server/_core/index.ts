@@ -11,6 +11,7 @@ import { serveStatic } from "./static";
 import klaviyoRouter from "../klaviyo";
 import seedRouter from "../seed-blogs-api";
 import seedCommunityRouter from "../seed-community-api";
+import seedAllRouter from "../seed-all";
 import airwallexRouter from "../airwallex";
 
 // Database migration function
@@ -125,6 +126,8 @@ async function startServer() {
   // Seed API (for initial data population)
   app.use("/api", seedRouter);
   app.use(seedCommunityRouter);
+  // Setup endpoint (seeds all data including admin)
+  app.use(seedAllRouter);
   // Airwallex Payment API
   app.use("/api/airwallex", airwallexRouter);
   // tRPC API

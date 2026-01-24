@@ -12,9 +12,41 @@ import seedRouter from "../seed-blogs-api";
 import seedCommunityRouter from "../seed-community-api";
 import airwallexRouter from "../airwallex";
 
-// CORS configuration for cross-origin requests (Netlify frontend -> Railway backend)
+// Database migration function
+async function runMigrations() {
+  if (!process.env.DATABASE_URL) {
+    console.log("[Migration] No DATABASE_URL found, skipping migrations");
+    return;
+  }
+
+  console.log("[Migration] Checking database schema...");
+
+  try {
+    const { drizzle } = await import("drizzle-orm/mysql2");
+    const { migrate } = await import("drizzle-orm/mysql2/migrator");
+    const mysql = await import("mysql2/promise");
+
+    const connection = await mysql.createConnection(process.env.DATABASE_URL);
+    const db = drizzle(connection);
+
+    await migrate(db, { migrationsFolder: "./drizzle" });
+
+    console.log("[Migration] Database schema is up to date");
+    await connection.end();
+  } catch (error: any) {
+    // Check if it's just "table already exists" which is fine
+    if (error.code === 'ER_TABLE_EXISTS_ERROR' || error.message?.includes('already exists')) {
+      console.log("[Migration] Tables already exist, continuing...");
+    } else {
+      console.error("[Migration] Migration error (non-fatal):", error.message || error);
+    }
+  }
+}
+
+// CORS configuration for cross-origin requests (Netlify/Vercel frontend -> Railway backend)
 const ALLOWED_ORIGINS = [
   "https://psyspeak.netlify.app",
+  "https://psy-neon.vercel.app",
   "http://localhost:3000",
   "http://localhost:5173",
   process.env.FRONTEND_URL,
@@ -40,6 +72,9 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 }
 
 async function startServer() {
+  // Run database migrations on startup
+  await runMigrations();
+
   const app = express();
   const server = createServer(app);
 

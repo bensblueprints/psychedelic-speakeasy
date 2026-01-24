@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Join from "./pages/Join";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import OptIn from "./pages/OptIn";
@@ -25,6 +26,8 @@ function Router() {
       <Route path={"/blog/:slug"} component={BlogPost} />
       <Route path={"/articles/:slug"} component={BlogPost} />
       <Route path={"/join"} component={Join} />
+      <Route path={"/login"} component={Login} />
+      <Route path={"/register"} component={Login} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/community"} component={Community} />

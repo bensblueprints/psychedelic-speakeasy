@@ -41,8 +41,8 @@ queryClient.getMutationCache().subscribe(event => {
   }
 });
 
-// Use Netlify Functions endpoint in production, local dev server in development
-const trpcUrl = import.meta.env.DEV ? "/api/trpc" : "/.netlify/functions/trpc";
+// API endpoint - will gracefully fail if backend not available
+const trpcUrl = "/api/trpc";
 
 const trpcClient = trpc.createClient({
   links: [

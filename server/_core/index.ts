@@ -64,13 +64,11 @@ async function runMigrations() {
   }
 }
 
-// CORS configuration for cross-origin requests (Netlify/Vercel frontend -> Railway backend)
+// CORS configuration - Railway serves frontend and backend from same origin
+// Only needed for local development
 const ALLOWED_ORIGINS = [
-  "https://psyspeak.netlify.app",
-  "https://psy-neon.vercel.app",
   "http://localhost:3000",
   "http://localhost:5173",
-  process.env.FRONTEND_URL,
 ].filter(Boolean) as string[];
 
 function isPortAvailable(port: number): Promise<boolean> {

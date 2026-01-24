@@ -24,25 +24,14 @@ function isSecureRequest(req: Request) {
 export function getSessionCookieOptions(
   req: Request
 ): Pick<CookieOptions, "domain" | "httpOnly" | "path" | "sameSite" | "secure"> {
-  const hostname = req.hostname;
-  const isLocalhost = LOCAL_HOSTS.has(hostname);
   const isSecure = isSecureRequest(req);
 
-  // For localhost/development: use "lax" sameSite (works with HTTP)
-  // For production (HTTPS): use "none" sameSite for cross-origin support
-  if (isLocalhost || !isSecure) {
-    return {
-      httpOnly: true,
-      path: "/",
-      sameSite: "lax",
-      secure: false,
-    };
-  }
-
+  // Use "lax" sameSite for same-origin requests (Railway serves both frontend and backend)
+  // "lax" works with both HTTP (localhost) and HTTPS (production)
   return {
     httpOnly: true,
     path: "/",
-    sameSite: "none",
-    secure: true,
+    sameSite: "lax",
+    secure: isSecure,
   };
 }

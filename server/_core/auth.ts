@@ -132,4 +132,32 @@ export function registerAuthRoutes(app: Express) {
       return res.json({ authenticated: false, user: null });
     }
   });
+
+  // One-time admin setup - makes the specified email an admin
+  // Usage: POST /api/auth/make-admin with { email, secretKey }
+  app.post("/api/auth/make-admin", async (req: Request, res: Response) => {
+    try {
+      const { email, secretKey } = req.body;
+
+      // Require the JWT_SECRET as a simple auth mechanism
+      if (secretKey !== process.env.JWT_SECRET) {
+        return res.status(403).json({ error: "Invalid secret key" });
+      }
+
+      if (!email) {
+        return res.status(400).json({ error: "Email required" });
+      }
+
+      const user = await db.getUserByEmail(email);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      await db.updateUserRole(user.id, "admin");
+      return res.json({ success: true, message: `${email} is now an admin` });
+    } catch (error) {
+      console.error("[Auth] Make admin failed:", error);
+      return res.status(500).json({ error: "Failed to update role" });
+    }
+  });
 }

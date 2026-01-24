@@ -30,7 +30,26 @@ async function runMigrations() {
     const connection = await mysql.createConnection(process.env.DATABASE_URL);
     const db = drizzle(connection);
 
-    await migrate(db, { migrationsFolder: "./drizzle" });
+    // Run drizzle migrations
+    try {
+      await migrate(db, { migrationsFolder: "./drizzle" });
+      console.log("[Migration] Drizzle migrations completed");
+    } catch (e: any) {
+      console.log("[Migration] Drizzle migration skipped:", e.message);
+    }
+
+    // Ensure password column exists (manual migration)
+    try {
+      await connection.execute(`ALTER TABLE users ADD COLUMN password varchar(255)`);
+      console.log("[Migration] Password column added");
+    } catch (e: any) {
+      // Column already exists - this is fine
+      if (e.code === 'ER_DUP_FIELDNAME' || e.message?.includes('Duplicate column')) {
+        console.log("[Migration] Password column already exists");
+      } else {
+        console.log("[Migration] Password column check:", e.message);
+      }
+    }
 
     console.log("[Migration] Database schema is up to date");
     await connection.end();

@@ -41,8 +41,10 @@ queryClient.getMutationCache().subscribe(event => {
   }
 });
 
-// API endpoint - will gracefully fail if backend not available
-const trpcUrl = "/api/trpc";
+// API endpoint - use environment variable for external backend, or relative path for same-origin
+const trpcUrl = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api/trpc`
+  : "/api/trpc";
 
 const trpcClient = trpc.createClient({
   links: [

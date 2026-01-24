@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { Eye, EyeOff, Loader2, ArrowLeft, Lock, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { trpc } from "@/lib/trpc";
 
 export default function Login() {
-  const [, setLocation] = useLocation();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -18,8 +16,6 @@ export default function Login() {
     password: "",
     name: "",
   });
-
-  const utils = trpc.useUtils();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,11 +36,10 @@ export default function Login() {
         throw new Error(data.error || "Authentication failed");
       }
 
-      // Invalidate auth query to refresh user state
-      await utils.auth.me.invalidate();
-
       toast.success(isLogin ? "Welcome back!" : "Account created successfully!");
-      setLocation("/dashboard");
+
+      // Use hard redirect to ensure session cookie is picked up
+      window.location.href = "/dashboard";
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");
     } finally {

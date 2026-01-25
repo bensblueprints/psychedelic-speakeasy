@@ -1,1 +1,0 @@
-ALTER TABLE `member_profiles` ADD `createdAt` timestamp DEFAULT (now()) NOT NULL;

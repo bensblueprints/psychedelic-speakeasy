@@ -13,46 +13,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { trpc } from "@/lib/trpc";
 
 export default function OptIn() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const subscribe = trpc.subscriber.subscribe.useMutation({
-    onSuccess: () => {
-      // Also send to Klaviyo if configured
-      sendToKlaviyo(email, firstName);
-      setIsSubmitted(true);
-      toast.success("You're in! Check your inbox for next steps.");
-    },
-    onError: (error) => {
-      if (error.message?.includes("already subscribed")) {
-        toast.info("You're already on the list! Check your inbox.");
-        setIsSubmitted(true);
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
-      setIsSubmitting(false);
-    },
-  });
-
-  const sendToKlaviyo = async (email: string, firstName: string) => {
-    // This will be called when Klaviyo API key is configured
-    // The actual API call happens on the server side
-    try {
-      const response = await fetch('/api/klaviyo/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, firstName, source: 'optin-page' }),
-      });
-      // Silent fail - we already saved to our database
-    } catch (e) {
-      // Klaviyo integration optional
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +27,11 @@ export default function OptIn() {
       return;
     }
     setIsSubmitting(true);
-    subscribe.mutate({ email, source: 'optin-page' });
+    
+    // Simulate submission - will be connected to Supabase later
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setIsSubmitted(true);
+    toast.success("You're in! Check your inbox for next steps.");
   };
 
   if (isSubmitted) {
@@ -105,7 +75,7 @@ export default function OptIn() {
           </div>
         </header>
 
-        {/* Main Hero - Email Collection Above the Fold */}
+        {/* Main Hero */}
         <main className="flex-1 flex items-center py-8 md:py-12">
           <div className="container">
             <div className="max-w-xl mx-auto">
@@ -131,7 +101,7 @@ export default function OptIn() {
                 </p>
               </motion.div>
 
-              {/* EMAIL FORM - ABOVE THE FOLD */}
+              {/* EMAIL FORM */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -198,27 +168,15 @@ export default function OptIn() {
                   </div>
                 ))}
               </motion.div>
-
-              {/* Pain Points - Compact */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="text-center text-sm text-muted-foreground"
-              >
-                <p className="mb-2">Struggling with trauma, addiction, or depression?</p>
-                <p className="text-primary font-medium">There's a natural path forward.</p>
-              </motion.div>
             </div>
           </div>
         </main>
       </section>
 
-      {/* Below the Fold - Additional Content */}
+      {/* Below the Fold Content */}
       <section className="py-12 bg-card/30 border-t border-border">
         <div className="container">
           <div className="max-w-2xl mx-auto">
-            {/* What You'll Get */}
             <h3 className="font-headline text-xl text-center mb-8">
               Inside Your Free Guide:
             </h3>
@@ -237,7 +195,7 @@ export default function OptIn() {
               ))}
             </div>
 
-            {/* Pain Points Expanded */}
+            {/* Pain Points */}
             <div className="bg-card border border-border rounded-lg p-6 mb-10">
               <h3 className="font-headline text-lg mb-4 text-center">Are You Experiencing:</h3>
               <div className="grid md:grid-cols-2 gap-3">
@@ -246,8 +204,6 @@ export default function OptIn() {
                   "Addiction patterns you can't seem to break?",
                   "Depression that medications only mask?",
                   "Anxiety that controls your daily life?",
-                  "Insomnia and sleep issues?",
-                  "Feeling disconnected from yourself?",
                 ].map((item, index) => (
                   <div key={index} className="flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
@@ -256,35 +212,6 @@ export default function OptIn() {
                 ))}
               </div>
             </div>
-
-            {/* Second CTA */}
-            <div className="bg-card border-2 border-primary rounded-lg p-6 text-center">
-              <h3 className="font-headline text-lg mb-4">
-                Ready to Start Your Healing Journey?
-              </h3>
-              <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-3">
-                <Input
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 bg-input border-border text-foreground placeholder:text-muted-foreground"
-                  required
-                />
-                <Button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline"
-                >
-                  {isSubmitting ? "SENDING..." : "GET MY FREE GUIDE"}
-                </Button>
-              </form>
-            </div>
-
-            {/* Quote */}
-            <p className="text-center text-sm text-muted-foreground italic mt-8">
-              "The journey of a thousand miles begins with a single step." — Lao Tzu
-            </p>
           </div>
         </div>
       </section>
@@ -292,17 +219,8 @@ export default function OptIn() {
       {/* Footer */}
       <footer className="py-6 border-t border-border">
         <div className="container">
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-card/50 border border-border rounded p-4 mb-4">
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                <strong>Disclaimer:</strong> The information provided is for educational purposes only. 
-                Always consult with a qualified healthcare professional before using any psychedelic substance. 
-                The legal status of these substances varies by jurisdiction.
-              </p>
-            </div>
-            <div className="text-center text-xs text-muted-foreground font-typewriter">
-              <p>© 2026 The Psychedelic Speakeasy. All Rights Reserved.</p>
-            </div>
+          <div className="text-center text-xs text-muted-foreground font-typewriter">
+            <p>© 2026 The Psychedelic Speakeasy. All Rights Reserved.</p>
           </div>
         </div>
       </footer>

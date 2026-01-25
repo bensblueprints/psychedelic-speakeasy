@@ -1,159 +1,18 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { trpc } from "@/lib/trpc";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { 
   CheckCircle, 
   Shield, 
   Users, 
   Lock, 
   ArrowLeft,
-  CreditCard,
-  Loader2,
-  Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { toast } from "sonner";
 
 export default function Join() {
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const [, setLocation] = useLocation();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'airwallex'>('stripe');
-  const [airwallexConfigured, setAirwallexConfigured] = useState(false);
-  
-  const { data: membershipStatus, isLoading: statusLoading } = trpc.membership.status.useQuery(
-    undefined,
-    { enabled: isAuthenticated }
-  );
-  
-  // Check if Airwallex is configured
-  useEffect(() => {
-    fetch('/api/airwallex/status')
-      .then(res => res.json())
-      .then(data => setAirwallexConfigured(data.configured))
-      .catch(() => setAirwallexConfigured(false));
-  }, []);
-  
-  const createMembership = trpc.membership.create.useMutation({
-    onSuccess: () => {
-      toast.success("Welcome to The Psychedelic Speakeasy!");
-      setLocation("/dashboard");
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to process membership");
-      setIsProcessing(false);
-    },
-  });
-
-  // Redirect to login if not authenticated
-  if (!authLoading && !isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto p-8">
-          <h1 className="text-3xl font-headline mb-4">Login Required</h1>
-          <p className="text-muted-foreground mb-6">
-            Please login or create an account to join The Psychedelic Speakeasy.
-          </p>
-          <a href={getLoginUrl()}>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-headline">
-              LOGIN TO CONTINUE
-            </Button>
-          </a>
-        </div>
-      </div>
-    );
-  }
-
-  // Already a member (but not admin - admins should see the page for testing)
-  if (membershipStatus?.hasMembership && !membershipStatus?.isAdmin) {
-    return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto p-8">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h1 className="text-3xl font-headline mb-4">You're Already a Member!</h1>
-          <p className="text-muted-foreground mb-6">
-            You already have access to The Psychedelic Speakeasy.
-          </p>
-          <Link href="/dashboard">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-headline">
-              GO TO MEMBER AREA
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const handleStripePayment = async () => {
-    setIsProcessing(true);
-    // For now, create membership directly (Stripe integration will be added later)
-    // In production, this would redirect to Stripe Checkout
-    createMembership.mutate({});
-  };
-
-  const handleAirwallexPayment = async () => {
-    setIsProcessing(true);
-    try {
-      const response = await fetch('/api/airwallex/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: 97,
-          currency: 'USD',
-          userId: user?.id,
-          userEmail: user?.email,
-          userName: user?.name,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create payment');
-      }
-
-      // Load Airwallex SDK and redirect to hosted payment page
-      const { init } = await import('@airwallex/components-sdk');
-      
-      const payment = await init({
-        env: 'demo', // Change to 'prod' for production
-        enabledElements: ['payments'],
-      });
-
-      // @ts-ignore - redirectToCheckout exists on the payment object
-      payment.redirectToCheckout({
-        intent_id: data.intentId,
-        client_secret: data.clientSecret,
-        currency: data.currency,
-        country_code: 'US',
-        successUrl: `${window.location.origin}/payment/success`,
-        failUrl: `${window.location.origin}/payment/failed`,
-      });
-    } catch (error: any) {
-      console.error('Airwallex payment error:', error);
-      toast.error(error.message || 'Payment failed. Please try again.');
-      setIsProcessing(false);
-    }
-  };
-
-  const handlePayment = () => {
-    if (paymentMethod === 'airwallex' && airwallexConfigured) {
-      handleAirwallexPayment();
-    } else {
-      handleStripePayment();
-    }
-  };
-
-  if (authLoading || statusLoading) {
-    return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -189,7 +48,7 @@ export default function Join() {
               className="text-center mb-12"
             >
               <div className="inline-block border-2 border-primary text-primary px-4 py-2 font-headline text-sm mb-6 transform -rotate-1">
-                SECURE CHECKOUT
+                MEMBERSHIP
               </div>
               <h2 className="text-3xl md:text-4xl font-headline mb-4">
                 Join The Underground
@@ -228,7 +87,7 @@ export default function Join() {
                   ))}
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-border">
+                <div className="grid grid-cols-3 gap-4 pt-6 mt-6 border-t border-border">
                   {[
                     { icon: Shield, label: "Vetted Vendors" },
                     { icon: Users, label: "Expert Community" },
@@ -264,64 +123,35 @@ export default function Join() {
                   </div>
                 </div>
 
-                {/* Payment Method Selection */}
-                {airwallexConfigured && (
-                  <div className="mb-6">
-                    <p className="text-sm text-muted-foreground mb-3 text-center">Select payment method:</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => setPaymentMethod('stripe')}
-                        className={`p-3 rounded-lg border-2 transition-all flex items-center justify-center gap-2 ${
-                          paymentMethod === 'stripe' 
-                            ? 'border-primary bg-primary/10' 
-                            : 'border-border hover:border-primary/50'
-                        }`}
-                      >
-                        <CreditCard className="w-4 h-4" />
-                        <span className="text-sm font-medium">Card</span>
-                      </button>
-                      <button
-                        onClick={() => setPaymentMethod('airwallex')}
-                        className={`p-3 rounded-lg border-2 transition-all flex items-center justify-center gap-2 ${
-                          paymentMethod === 'airwallex' 
-                            ? 'border-primary bg-primary/10' 
-                            : 'border-border hover:border-primary/50'
-                        }`}
-                      >
-                        <Globe className="w-4 h-4" />
-                        <span className="text-sm font-medium">Global Pay</span>
-                      </button>
-                    </div>
+                {isAuthenticated ? (
+                  <div className="text-center">
+                    <p className="text-muted-foreground mb-4">
+                      Payment processing coming soon!
+                    </p>
+                    <Link href="/dashboard">
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg py-6">
+                        GO TO DASHBOARD
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <a href={getLoginUrl()}>
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg py-6">
+                        LOGIN TO JOIN
+                      </Button>
+                    </a>
+                    <p className="text-center text-sm text-muted-foreground">
+                      Create an account or login to complete your membership
+                    </p>
                   </div>
                 )}
-
-                <Button
-                  onClick={handlePayment}
-                  disabled={isProcessing}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg py-6"
-                >
-                  {isProcessing ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      PROCESSING...
-                    </>
-                  ) : (
-                    <>
-                      <CreditCard className="w-5 h-5 mr-2" />
-                      GET INSTANT ACCESS NOW
-                    </>
-                  )}
-                </Button>
 
                 <div className="mt-6 space-y-3 text-center text-xs text-muted-foreground">
                   <div className="flex items-center justify-center gap-2">
                     <Lock className="w-3 h-3" />
                     <span>256-bit SSL Encrypted Payment</span>
                   </div>
-                  <p>
-                    By joining, you agree to our Terms of Service and Privacy Policy.
-                    This is a private membership community.
-                  </p>
                 </div>
 
                 <div className="mt-6 p-4 bg-muted/30 rounded-lg">
@@ -368,9 +198,6 @@ export default function Join() {
         <div className="container">
           <div className="text-center text-xs text-muted-foreground font-typewriter">
             <p>© 2026 The Psychedelic Speakeasy. All Rights Reserved.</p>
-            <p className="mt-2">
-              This is a private membership community. All information is for educational purposes only.
-            </p>
           </div>
         </div>
       </footer>

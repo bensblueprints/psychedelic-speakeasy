@@ -16,7 +16,6 @@ import {
   LogIn
 } from "lucide-react";
 import { Link } from "wouter";
-import { trpc } from "@/lib/trpc";
 import { ArrowRight, BookOpen } from "lucide-react";
 
 /*
@@ -34,37 +33,39 @@ import { ArrowRight, BookOpen } from "lucide-react";
  * - Vetted vendor messaging
  */
 
-// Component to display latest articles
+// Component to display latest articles - placeholder until backend is built
 function LatestArticles() {
-  const { data: posts, isLoading } = trpc.blog.list.useQuery({ limit: 6, offset: 0 });
-
-  if (isLoading) {
-    return (
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-card border border-border rounded-lg p-6 animate-pulse">
-            <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
-            <div className="h-6 bg-muted rounded w-3/4 mb-3"></div>
-            <div className="h-4 bg-muted rounded w-full mb-2"></div>
-            <div className="h-4 bg-muted rounded w-2/3"></div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  if (!posts || posts.length === 0) {
-    return (
-      <div className="text-center py-12 bg-card/50 border border-border rounded-lg">
-        <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-        <p className="text-muted-foreground">Articles coming soon...</p>
-      </div>
-    );
-  }
+  // Placeholder articles for static display
+  const placeholderPosts = [
+    {
+      id: 1,
+      slug: "understanding-amanita-muscaria",
+      title: "Understanding Amanita Muscaria: A Beginner's Guide",
+      excerpt: "An introduction to the history, science, and safe practices surrounding this ancient sacred mushroom.",
+      category: "Education",
+      publishedAt: new Date("2026-01-15"),
+    },
+    {
+      id: 2,
+      slug: "psilocybin-research-2026",
+      title: "The Latest Psilocybin Research: What Science is Revealing",
+      excerpt: "A comprehensive overview of recent clinical trials and breakthrough findings in psychedelic therapy.",
+      category: "Research",
+      publishedAt: new Date("2026-01-10"),
+    },
+    {
+      id: 3,
+      slug: "integration-practices",
+      title: "Integration Practices: Making the Most of Your Journey",
+      excerpt: "Essential techniques for integrating psychedelic experiences into lasting personal transformation.",
+      category: "Guides",
+      publishedAt: new Date("2026-01-05"),
+    },
+  ];
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {posts.slice(0, 6).map((post, index) => (
+      {placeholderPosts.map((post, index) => (
         <motion.article
           key={post.id}
           initial={{ opacity: 0, y: 20 }}
@@ -77,11 +78,11 @@ function LatestArticles() {
             <div className="p-6">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs font-typewriter text-primary uppercase">
-                  {post.category || 'Research'}
+                  {post.category}
                 </span>
                 <span className="text-muted-foreground">•</span>
                 <span className="text-xs text-muted-foreground font-typewriter">
-                  {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Draft'}
+                  {post.publishedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
               </div>
               <h4 className="text-lg font-headline text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">

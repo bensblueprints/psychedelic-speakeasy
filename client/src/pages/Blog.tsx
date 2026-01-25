@@ -1,14 +1,61 @@
 import { motion } from "framer-motion";
-import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
-import { Calendar, Clock, Eye, ArrowRight, LogIn } from "lucide-react";
+import { Calendar, Eye, ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 
+// Placeholder articles until backend is connected
+const placeholderPosts = [
+  {
+    id: 1,
+    slug: "understanding-amanita-muscaria",
+    title: "Understanding Amanita Muscaria: A Beginner's Guide",
+    excerpt: "An introduction to the history, science, and safe practices surrounding this ancient sacred mushroom.",
+    category: "Education",
+    publishedAt: new Date("2026-01-15"),
+    viewCount: 1247,
+  },
+  {
+    id: 2,
+    slug: "psilocybin-research-2026",
+    title: "The Latest Psilocybin Research: What Science is Revealing",
+    excerpt: "A comprehensive overview of recent clinical trials and breakthrough findings in psychedelic therapy.",
+    category: "Research",
+    publishedAt: new Date("2026-01-10"),
+    viewCount: 892,
+  },
+  {
+    id: 3,
+    slug: "integration-practices",
+    title: "Integration Practices: Making the Most of Your Journey",
+    excerpt: "Essential techniques for integrating psychedelic experiences into lasting personal transformation.",
+    category: "Guides",
+    publishedAt: new Date("2026-01-05"),
+    viewCount: 654,
+  },
+  {
+    id: 4,
+    slug: "microdosing-protocols",
+    title: "Microdosing Protocols: Finding What Works for You",
+    excerpt: "Explore different microdosing schedules and learn how to optimize your protocol for mental clarity and wellbeing.",
+    category: "Guides",
+    publishedAt: new Date("2026-01-02"),
+    viewCount: 1089,
+  },
+  {
+    id: 5,
+    slug: "set-and-setting",
+    title: "The Importance of Set and Setting",
+    excerpt: "Why your mindset and environment are crucial for safe and meaningful psychedelic experiences.",
+    category: "Safety",
+    publishedAt: new Date("2025-12-28"),
+    viewCount: 723,
+  },
+];
+
 export default function Blog() {
   const { isAuthenticated } = useAuth();
-  const { data: posts, isLoading } = trpc.blog.list.useQuery({ limit: 20, offset: 0 });
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -64,69 +111,46 @@ export default function Blog() {
                 Latest Articles
               </h2>
 
-              {isLoading ? (
-                <div className="space-y-6">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="bg-card border border-border rounded-lg p-6 animate-pulse">
-                      <div className="h-6 bg-muted rounded w-3/4 mb-4"></div>
-                      <div className="h-4 bg-muted rounded w-full mb-2"></div>
-                      <div className="h-4 bg-muted rounded w-2/3"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : posts && posts.length > 0 ? (
-                <div className="space-y-6">
-                  {posts.map((post, index) => (
-                    <motion.article
-                      key={post.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-colors"
-                    >
-                      <Link href={`/blog/${post.slug}`}>
-                        <div className="p-6 cursor-pointer">
-                          {post.category && (
-                            <span className="inline-block bg-primary/20 text-primary px-3 py-1 text-xs font-typewriter mb-3">
-                              {post.category.toUpperCase()}
+              <div className="space-y-6">
+                {placeholderPosts.map((post, index) => (
+                  <motion.article
+                    key={post.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-colors"
+                  >
+                    <Link href={`/blog/${post.slug}`}>
+                      <div className="p-6 cursor-pointer">
+                        <span className="inline-block bg-primary/20 text-primary px-3 py-1 text-xs font-typewriter mb-3">
+                          {post.category.toUpperCase()}
+                        </span>
+                        <h3 className="text-xl md:text-2xl font-headline mb-3 hover:text-primary transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-muted-foreground mb-4 line-clamp-2">
+                          {post.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground font-typewriter">
+                          <div className="flex items-center gap-4">
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              {post.publishedAt.toLocaleDateString()}
                             </span>
-                          )}
-                          <h3 className="text-xl md:text-2xl font-headline mb-3 hover:text-primary transition-colors">
-                            {post.title}
-                          </h3>
-                          {post.excerpt && (
-                            <p className="text-muted-foreground mb-4 line-clamp-2">
-                              {post.excerpt}
-                            </p>
-                          )}
-                          <div className="flex items-center justify-between text-sm text-muted-foreground font-typewriter">
-                            <div className="flex items-center gap-4">
-                              {post.publishedAt && (
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="w-4 h-4" />
-                                  {new Date(post.publishedAt).toLocaleDateString()}
-                                </span>
-                              )}
-                              <span className="flex items-center gap-1">
-                                <Eye className="w-4 h-4" />
-                                {post.viewCount} views
-                              </span>
-                            </div>
-                            <span className="flex items-center gap-1 text-primary">
-                              Read More <ArrowRight className="w-4 h-4" />
+                            <span className="flex items-center gap-1">
+                              <Eye className="w-4 h-4" />
+                              {post.viewCount} views
                             </span>
                           </div>
+                          <span className="flex items-center gap-1 text-primary">
+                            Read More <ArrowRight className="w-4 h-4" />
+                          </span>
                         </div>
-                      </Link>
-                    </motion.article>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12 bg-card border border-border rounded-lg">
-                  <p className="text-muted-foreground mb-4">No articles published yet.</p>
-                  <p className="text-sm text-muted-foreground">Check back soon for new content!</p>
-                </div>
-              )}
+                      </div>
+                    </Link>
+                  </motion.article>
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>

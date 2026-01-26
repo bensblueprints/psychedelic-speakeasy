@@ -397,3 +397,145 @@ Find someone qualified to guide you. Prepare thoroughly. Be willing to feel what
   'psilocybin healing, childhood trauma, PTSD, therapy, healing journey, member story',
   true, NOW(), true, NOW()
 ) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();
+
+-- ============================================
+-- PREMIUM STORY 2: Beating Alcohol Addiction (~1200 words)
+-- Members Only Content
+-- ============================================
+
+INSERT INTO blog_posts (
+  slug, title, excerpt, content, "metaTitle", "metaDescription", category, tags, "isPublished", "publishedAt", "isPremiumOnly", "createdAt"
+) VALUES (
+  'premium-alcohol-addiction-recovery-mushrooms',
+  'From Alcoholic to Alcohol-Free: My Psilocybin Recovery Story',
+  'After 20 years of drinking and countless failed attempts to quit, one profound mushroom experience changed everything.',
+  '## Twenty Years of Trying and Failing
+
+My relationship with alcohol began innocently enough at fifteen, sneaking beers from my parents'' refrigerator with friends. By twenty-five, I was drinking daily, unable to imagine socializing, relaxing, or coping with stress without a glass in my hand. By thirty-five, I had crossed into territory I never intended to enter. I was an alcoholic, and despite knowing it with complete clarity, I could not stop.
+
+I was what they call high-functioning. I held a demanding job, paid my mortgage on time, maintained friendships, and appeared to the outside world like someone who had their life together. But this appearance required increasingly elaborate deception and enormous amounts of energy. Every day I woke up swearing this would be the day I stopped. Every evening I found myself pouring another drink, telling myself I would start fresh tomorrow.
+
+Over twenty years, I tried everything. I attended AA meetings in three different cities, collecting chips I never managed to keep. I went to inpatient rehab twice, leaving with every intention of staying sober and relapsing within weeks. I tried naltrexone, which made drinking less pleasurable without touching the compulsion. I tried Antabuse, which I eventually stopped taking so I could drink despite the consequences. I saw therapists who helped me understand why I drank without helping me stop. I tried hypnotherapy, acupuncture, and every self-help book ever written about addiction.
+
+The longest I ever managed was forty-three days. I remember the exact number because I was so proud of it, and so devastated when I found myself drunk on day forty-four with no clear memory of how I had gotten there. That moment crystallized something: I was not going to willpower my way out of this. The part of me that wanted to drink was stronger than the part that wanted to stop.
+
+By the time I heard about psilocybin research for addiction, I had largely accepted that alcohol would probably kill me. It was just a question of when.
+
+## Discovering an Unlikely Path
+
+A post in an online recovery forum caught my attention late one night. Someone was describing their experience with psilocybin-assisted therapy and how it had helped them stay sober when nothing else had worked. I was skeptical. Using one substance to treat addiction to another seemed backward, maybe even like an excuse to keep using drugs.
+
+But I was desperate enough to research it anyway. I found the Johns Hopkins studies showing 80 percent smoking cessation rates, far exceeding any conventional treatment. I found smaller studies on alcohol use disorder with similar results. I read accounts from people like me, people who had tried everything, people who had finally found freedom through a method they never would have expected.
+
+The more I read, the more something shifted in my understanding. This was not about replacing one addiction with another. Psilocybin is not addictive and is typically used only a few times, not ongoing. The mechanism seemed to be about breaking patterns at the deepest level, creating a window for change that therapy and willpower alone could not achieve.
+
+It took me three months to find an experienced guide through the underground network that exists for those of us in places where legal options do not. We spent weeks preparing, discussing my addiction history, examining what I was really trying to escape through alcohol, building trust for what would be one of the most intense experiences of my life.
+
+## The Night Everything Changed
+
+I tapered my drinking under medical supervision in the two weeks before the session, reaching complete sobriety three days before taking the mushrooms. My guide created a safe space in his home, with soft lighting, carefully chosen music, and minimal talking. He would be there for safety but would not direct my experience.
+
+I took five grams of dried mushrooms, more than I had ever taken in recreational experiments years before. This was not about having a pleasant time. This was about going deep enough to find whatever was driving this compulsion that had stolen twenty years of my life.
+
+The first hour was uncomfortable. Nausea rose and fell. Anxiety tightened my chest with the familiar desperate longing for a drink to calm my nerves. I told my guide I was not sure I could do this. He reminded me to breathe and surrender.
+
+And then the mushrooms took over, and I was no longer in control.
+
+What happened next is difficult to describe. I saw my relationship with alcohol not as a series of bad decisions but as a living entity, a parasite that had wrapped itself around my psyche decades ago and had been feeding on my life force ever since. I saw how it had hollowed me out, replacing genuine emotion with numbed simulation. I saw how it had convinced me it was my best friend while systematically destroying everything I cared about.
+
+There was a confrontation. In some space beyond ordinary reality, I faced this entity and told it I was done. The struggle that followed was the most intense experience of my life. At some point I vomited violently, and my guide later told me I thrashed and cried for hours as something worked its way out of me.
+
+Then came a peace unlike anything I had ever known. Not just calm but empty, in the best sense. The craving that had been the background noise of my existence for two decades was simply gone. Not suppressed or managed but absent, like a radio station switched off. I lay there in stunned silence, feeling my body without the familiar itch for alcohol for the first time in my adult life.
+
+## The Morning After and Beyond
+
+I woke the next morning waiting for the craving to return. It did not. I waited for it through breakfast, through the drive home, through the evening when I would normally be three drinks in. Nothing. The compulsion that had controlled me for twenty years had released its grip.
+
+I want to be careful here, because I know this sounds too good to be true. I have heard others describe similar experiences and been skeptical myself. All I can tell you is what happened to me: the craving did not come back. Not reduced, not managed, but gone.
+
+This does not mean recovery was easy. I still had to rebuild a life that had been organized around drinking for two decades. With my integration therapist, I worked through the shame of all the years lost, the relationships damaged, the opportunities missed. I found new ways to handle stress, to socialize, to relax without a crutch. I attended support groups not because I was white-knuckling it through cravings but because I needed community and wisdom for the rebuilding process.
+
+## Three Years Later
+
+I have not had a drink in three years and four months. I have been to weddings, funerals, parties, high-stress work situations, everything that used to trigger drinking. The craving remains absent. I am not naive enough to think I am cured forever. I maintain vigilance. I have had two more psilocybin sessions to deepen my understanding and reinforce my freedom. I stay connected to recovery community.
+
+But something fundamental shifted that night. The entity lost its grip. The parasite was starved of attention and withered. I got my life back. My wife stayed. My children have a father who is present. I wake up without dread for the first time since I was a teenager.
+
+If you are where I was, trapped in a pattern that feels impossible to escape, know that there are paths you may not have tried. This one is not for everyone, and it is not a guaranteed cure. But for me, after twenty years of trying everything else, one night finally set me free.',
+  'Alcohol Recovery with Psilocybin | Member Story',
+  'A member shares how psilocybin helped them overcome 20 years of alcohol addiction.',
+  'Stories',
+  'alcohol recovery, addiction, psilocybin therapy, sobriety, member story',
+  true, NOW(), true, NOW()
+) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();
+
+-- ============================================
+-- PREMIUM STORY 3: Veteran PTSD Healing (~1200 words)
+-- Members Only Content
+-- ============================================
+
+INSERT INTO blog_posts (
+  slug, title, excerpt, content, "metaTitle", "metaDescription", category, tags, "isPublished", "publishedAt", "isPremiumOnly", "createdAt"
+) VALUES (
+  'premium-veteran-ptsd-healing-psychedelics',
+  'A Combat Veteran''s Journey: How Psychedelics Finally Helped Me Escape PTSD',
+  'After three deployments and years of VA treatments that barely helped, a Marine veteran shares how psychedelic therapy changed everything.',
+  '## Coming Home to a Different Kind of War
+
+Three deployments to Iraq and Afghanistan over twelve years in the Marine Corps. I saw things that no human being should see. I did things that I will carry with me forever. When my enlistment ended and I returned to civilian life, everyone told me I was lucky to be home safely. They had no idea that the real war was just beginning.
+
+The symptoms crept up gradually at first. Nightmares that jolted me awake drenched in sweat, sometimes reaching for a weapon that was not there. Hypervigilance that made ordinary situations feel like potential ambushes. A grocery store was not a grocery store but a crowded space with too many unknown variables and insufficient sight lines. Fireworks on the Fourth of July sent me diving for cover while my neighbors laughed and celebrated.
+
+Then came the emotional flatness, the numbness that protected me from the bad memories but also cut me off from joy, love, connection, everything that makes life worth living. My wife would tell me she loved me and I would say it back automatically, unable to feel the truth of the words. My kids would show me drawings and I would praise them through the fog, present in body but absent in spirit.
+
+I started drinking to sleep, then drinking to function, then drinking just to survive another day. I kept a loaded pistol in my nightstand, and on the darkest nights, I would hold it and consider ending the constant internal warfare.
+
+It was my wife threatening to take the kids and leave that finally pushed me to seek help.
+
+## The VA System and Its Limits
+
+I do not want to attack the VA. The people working there are doing their best with limited resources and overwhelming demand. But my experience left me frustrated and barely functional.
+
+They prescribed Prazosin for the nightmares, which helped somewhat. Zoloft for depression, which flattened me even further. Xanax for anxiety, which worked until I realized I was developing a new dependence to add to the alcohol. They put me through exposure therapy, which felt like repeatedly ripping open a wound without ever letting it heal. Group therapy sessions where we shared our worst moments without learning how to move past them.
+
+After two years of treatment, I was on five medications with side effects I could barely tolerate. I was marginally more functional than when I started but nowhere close to healed. The VA psychiatrist told me this was probably as good as it gets. Management, not recovery. Survival, not living.
+
+When I heard about MDMA trials for PTSD through another veteran, I was skeptical but desperate. The VA waitlist for the study was eighteen months long. I could not wait that long. Through Heroic Hearts Project, a veteran psychedelic advocacy organization, I connected with others who had found healing outside the system. They pointed me toward a therapist experienced in working with veterans and MDMA.
+
+I know this path is legally risky and not available to everyone. I know that legal MDMA therapy is hopefully coming soon through FDA approval. But I was running out of time, and my family was running out of patience.
+
+## The MDMA Experience
+
+My therapist used a protocol similar to the one in clinical trials: preparation sessions to build trust and address my history, medicine sessions, and integration sessions afterward. This was not recreational. It was the most challenging therapeutic work of my life.
+
+During my first MDMA session, I felt something I had not felt since before my first deployment: safety. Not the vigilant alertness I had mistaken for safety for years, but actual relaxation in my nervous system. For the first time in a decade, my body stopped preparing for attack.
+
+With that safety came the ability to talk about things I had never told anyone. The checkpoint shooting where I killed a family because their car did not stop, later discovering they were just terrified civilians who did not understand our commands. The children's bodies after an IED meant for my convoy. The friend who bled out in my arms while I screamed for medevac that came too late. The things I did that made sense in combat but haunted me in peace.
+
+With the MDMA reducing my fear response, I could process these memories rather than just reliving them. I could feel the grief and horror fully without being overwhelmed and destroyed by them. My therapist sat with me through hours of tears and rage, providing the calm presence that allowed me to finally let it out.
+
+## Finding What I Lost
+
+By my third MDMA session, something fundamental had shifted. The memories remained but they no longer controlled me. I could remember without spiraling into panic or dissociation. I could sleep without nightmares for the first time in years.
+
+More importantly, I could feel again. The emotional numbness that had protected me but also imprisoned me began to lift. I felt love for my wife, not just the concept but the actual warmth in my chest when I looked at her. I felt joy playing with my kids, present in a way I had not been since before my first deployment. I felt sadness at what I had lost, and for the first time, that sadness could move through me rather than freezing inside.
+
+I also explored psilocybin with my therapist, which helped with the longer-term meaning-making. What did my service mean? How could I integrate the warrior I had been with the father and husband I wanted to be? How could I find purpose in civilian life when everything felt small compared to the intensity of combat? These questions needed exploring at a depth that MDMA alone did not reach.
+
+## Where I Am Now
+
+Two years have passed since my first MDMA session. I am off all psychiatric medications, tapered carefully with medical supervision. The nightmares come maybe once a month instead of every night. The hypervigilance has decreased dramatically, though I still notice myself scanning rooms and positioning for sightlines. Some things may never fully go away.
+
+I am still married to the same woman who almost left me, and now we are actually partners again rather than roommates managing a crisis. My children have a father who is present, who can wrestle and laugh and cry with them. I hold down a job, contribute to my community, and wake up most days grateful to be alive rather than planning how to end it.
+
+The pistol is gone from my nightstand.
+
+I volunteer now with veteran psychedelic advocacy organizations, sharing my story when I can because I know there are other vets sitting in that dark place, believing nothing will help. I want them to know: there is something that might help. It is coming through legal channels for some. For others, like me, the underground path was the only option.
+
+We fought for this country. We deserve to heal.',
+  'Veteran PTSD Healing with Psychedelics | Member Story',
+  'A combat veteran shares how MDMA and psilocybin therapy helped overcome PTSD after VA treatments failed.',
+  'Stories',
+  'veteran PTSD, MDMA therapy, military mental health, trauma healing, member story',
+  true, NOW(), true, NOW()
+) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();

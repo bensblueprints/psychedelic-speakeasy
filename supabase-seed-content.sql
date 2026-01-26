@@ -687,3 +687,145 @@ There is light on the other side of the gray. I found it. You might too.',
   'depression recovery, treatment resistant, psilocybin therapy, mental health, member story',
   true, NOW(), true, NOW()
 ) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();
+
+-- ============================================
+-- PREMIUM STORY 6: Grief and Loss Healing (~1100 words)
+-- ============================================
+
+INSERT INTO blog_posts (
+  slug, title, excerpt, content, "metaTitle", "metaDescription", category, tags, "isPublished", "publishedAt", "isPremiumOnly", "createdAt"
+) VALUES (
+  'premium-grief-loss-psilocybin-healing',
+  'Finding Peace After Loss: A Psilocybin Journey Through Grief',
+  'After losing my partner of 25 years, I was drowning in grief. Psilocybin helped me find peace without forgetting.',
+  '## When Half of Your Life Disappears
+
+Sarah and I met when we were twenty-three. We married at twenty-five. We built a life together over the next quarter century, through career changes and health scares, through the raising of two children and the death of both our parents, through renovating houses and traveling the world and all the ordinary magic of a long partnership. She was not just my wife but my best friend, my co-conspirator, my other half in the most literal sense.
+
+When she was diagnosed with ovarian cancer, we fought together with everything we had. Three years of treatment, of hope and despair and hope again, of remissions and recurrences, of gradual decline that somehow still shocked me every time I saw another piece of her fading. She died on a Tuesday afternoon in October, holding my hand, and when she left, she took half of me with her.
+
+I was sixty-two years old and completely lost.
+
+The grief was unlike anything I had experienced, and I thought I had experienced grief when my parents died. This was different. This was an amputation. Every morning I woke up reaching for her before remembering. Every evening I set the table for two before realizing. Every night I lay in our bed, now obscenely large, unable to sleep for more than a few hours without waking to the horror of her absence.
+
+Months passed and I got worse, not better. People told me time would heal, but time seemed to be making things worse. I could not eat. I could not think. I could not imagine any reason to continue existing in a world without her. I was not suicidal exactly, but I was not opposed to dying.
+
+## A Suggestion from an Unexpected Source
+
+My daughter, worried about me, had been researching grief interventions. She found a study from Johns Hopkins showing that psilocybin helped people process the death of loved ones, particularly when traditional grief support was not working. She approached me carefully, knowing I might dismiss it.
+
+I was not a psychedelic person. I had never taken anything stronger than marijuana and had not even done that since college. The idea of taking mushrooms as a grief treatment seemed absurd, like suggesting I heal my broken heart by going to a rave. But I was desperate enough to research it.
+
+What I found surprised me. Serious institutions were studying this. The results were significant and sustained. People were finding something through psilocybin that traditional grief counseling could not provide. Not forgetting their loved ones but finding a new relationship with loss, one that allowed them to live again while still honoring what was gone.
+
+I found a guide through careful research and referrals, someone who specialized in grief work with psychedelics. We spent three sessions preparing, talking about Sarah, about our life together, about what I was hoping for and what I feared. I told him I did not want to forget her. I did not want to move on as if she had not mattered. I wanted to be able to live with her loss without being destroyed by it. He said that was exactly the right intention.
+
+## The Journey to the Other Side of Grief
+
+The session took place in my own home, the home Sarah and I had shared for two decades. My guide felt this was important, that the spirits of our life together might be more accessible there. He created a sacred space with photographs of Sarah, with some of her favorite objects, with flowers from the garden she had loved.
+
+I took four grams of dried mushrooms, ground into a capsule, and lay back on our couch as the medicine began its work. Music played softly, carefully chosen pieces that Sarah had loved. My guide sat quietly nearby, present but unobtrusive.
+
+What happened over the next several hours was the most profound experience of my life.
+
+As the psilocybin took hold, I felt Sarah''s presence with an intensity I had not felt since she died. Not a ghost, not a hallucination, but a palpable sense of her essence still existing somewhere, somehow. We communicated without words, in that language of shared understanding that twenty-five years of intimacy creates.
+
+She showed me that love does not end when bodies do. That what we had built together still existed, still mattered, still connected us across whatever threshold she had crossed. She was not gone. She was changed. And I could still reach her if I learned how.
+
+I experienced our entire relationship in what felt like both an instant and an eternity. Every significant moment, every laugh and fight and reconciliation, every quiet evening and grand adventure. I saw the pattern of our love from outside time, and it was beautiful beyond anything I could have imagined.
+
+I wept for hours. But these tears were different from the frozen grief I had been carrying. They flowed. They released. They cleansed something that had been poisoning me since she died.
+
+Toward the end of the journey, Sarah gave me what I can only describe as permission. Permission to live the years I had remaining. Permission to find joy without feeling guilty that she could not share it. Permission to keep our love alive while also opening to whatever new life might emerge.
+
+## What Remained After the Journey
+
+I did not stop grieving that night. The loss of Sarah will mark me for whatever years I have left. But something shifted fundamentally in my relationship with that grief.
+
+Before psilocybin, the grief felt like drowning. After, it felt like swimming in deep water. Still immersed, still aware of the depths below, but no longer being pulled under. I could stay on the surface. I could even, sometimes, float.
+
+I can look at our photographs now without crumbling. I can tell stories about Sarah that make me laugh instead of just cry. I can visit her grave and feel connection rather than only absence. I can spend time with our children and grandchildren and be genuinely present with them, not just going through motions while lost in internal sorrow.
+
+I have not moved on from Sarah. I never will. But I have learned to move forward with her, carrying our love as a blessing rather than only a wound. The psilocybin did not erase my grief. It transformed my relationship with it.
+
+## For Others Walking This Path
+
+If you are drowning in loss, please know that transformation is possible. Not forgetting, not betraying the person you loved, but finding a way to carry them with you that does not destroy your own remaining life.
+
+Grief is love with nowhere to go. Psilocybin helped me find somewhere for it to go. It helped me understand that the connection I thought was severed by death still existed, just in a different form. It gave me back my ability to live while still honoring what was lost.
+
+Sarah would want me to live. I know that now in my bones, not just in my head. And so I do.',
+  'Grief Healing with Psilocybin | Member Story',
+  'A member shares how psilocybin helped process the loss of a partner of 25 years.',
+  'Stories',
+  'grief healing, loss, psilocybin therapy, bereavement, member story',
+  true, NOW(), true, NOW()
+) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();
+
+-- ============================================
+-- PREMIUM STORY 7: Anxiety Disorder Recovery (~1100 words)
+-- ============================================
+
+INSERT INTO blog_posts (
+  slug, title, excerpt, content, "metaTitle", "metaDescription", category, tags, "isPublished", "publishedAt", "isPremiumOnly", "createdAt"
+) VALUES (
+  'premium-anxiety-disorder-healing',
+  'Breaking Free from Anxiety: How Mushrooms Helped Me Finally Breathe',
+  'Generalized anxiety disorder controlled my life for 20 years. Here is how psilocybin helped me find peace.',
+  '## Living in a State of Constant Emergency
+
+For as long as I can remember, I have been afraid. Not of anything specific, but of everything and nothing simultaneously. My mind was a machine dedicated to producing worst-case scenarios, spinning through disasters that might happen, rehearsing catastrophes that probably would not occur but felt inevitable nonetheless.
+
+I was diagnosed with generalized anxiety disorder in my mid-twenties, though the anxiety had been there since childhood. My earliest memories include the stomach-churning dread of ordinary situations: going to school, meeting new people, being called on in class. As an adult, the fears evolved but never released their grip. Work presentations became sources of weeks-long anticipatory anguish. Social gatherings required days of mental preparation and days of recovery afterward. Even driving to the grocery store could trigger cascading what-ifs that left me paralyzed.
+
+The physical symptoms were almost worse than the psychological ones. My shoulders lived somewhere near my ears, permanently tensed against threats that never materialized. My breathing stayed shallow, my chest tight, my heart prone to sudden racing. I developed chronic headaches and digestive problems that doctors attributed to stress but could not alleviate. My body was stuck in emergency mode, unable to believe it was ever truly safe.
+
+I tried everything the mental health system had to offer. SSRIs helped take the edge off but also took the edge off everything else, leaving me functional but flattened. Benzodiazepines worked better but scared me with their addictive potential and left me foggy for hours afterward. Cognitive behavioral therapy gave me tools to challenge anxious thoughts, but challenging thoughts is exhausting when your brain generates them by the hundreds every day. Mindfulness meditation helped some, when I could sit still long enough to practice, which was not often.
+
+By my mid-forties, I had more or less accepted that anxiety was simply my operating system. Some people had calm minds. I had this one. Management was the best I could hope for.
+
+## The Suggestion That Scared Me Most
+
+When a friend who knew my history suggested I look into psilocybin for anxiety, my first reaction was more anxiety. Taking psychedelics seemed like the worst possible idea for someone whose problem was an overactive mind prone to spiraling. Would not mushrooms just add more chaos? Would not I have a terrible trip and emerge even more broken than before?
+
+But my friend had done his research, and he shared it with me. Clinical studies showing significant reductions in anxiety, even in people with cancer facing death. Brain imaging revealing decreased activity in the default mode network, the part of the brain responsible for the self-referential rumination that defined my existence. Personal accounts from people like me who had found something in psilocybin they had never found elsewhere: genuine peace.
+
+The thing that finally convinced me was learning that the anxiety I feared might surface during a session was not just a risk but potentially the point. Psilocybin could bring up the very material that needed to be processed, and with proper support, that material could be transformed rather than simply suppressed again. I was tired of suppressing. I wanted to be free.
+
+## Confronting the Anxious Self
+
+I worked with an experienced guide who understood anxiety disorders. We prepared thoroughly, addressing my specific fears about the experience itself. She helped me understand that anxiety during the journey was not a sign of failure but an opportunity. Whatever arose could be met with the same compassion I would offer a frightened child.
+
+On the day of my session, I was predictably terrified. My heart raced as I swallowed 2.5 grams of dried mushrooms. My palms sweated as I lay back and put on the eye mask. The familiar litany of worst-case scenarios began their parade through my mind: What if I panic? What if I go crazy? What if this makes everything worse?
+
+And then the mushrooms began to work, and something remarkable happened.
+
+The anxious thoughts continued at first, but my relationship to them shifted. I could see them arising, playing their familiar recordings, but I was not fused with them the way I usually was. There was space between me and the anxiety. For the first time in my life, I understood that I was not my anxious thoughts. I was the awareness in which those thoughts appeared.
+
+As the journey deepened, I saw the origin of my anxiety. I will not share all the details, but I witnessed the experiences that had taught my nervous system that the world was dangerous. A sensitive child in a chaotic home had learned that vigilance was survival. That child had built a surveillance system to keep herself safe, and that system had been running ever since, long after it was needed.
+
+With understanding came compassion. That frightened child had done her best. The anxiety that had plagued me for forty years was not a malfunction but an adaptation, a protection that had outlived its necessity. I thanked it for its service. And I felt it begin to release.
+
+## The Quiet Mind I Never Knew Existed
+
+The most extraordinary part of my psilocybin experience was not the visions or insights. It was the silence.
+
+For the first time in my conscious memory, my mind was quiet. Not just quieter than usual, but actually quiet. The constant commentary, the risk assessments, the what-if generators all stopped. In their absence, I discovered something I had never believed existed for me: peace.
+
+I lay there in the silence and wept. Not from sadness but from the sheer relief of it. This was what other people felt. This was what it was like to not be anxious. This was what had been waiting beneath the noise all along.
+
+## Living in the After
+
+That peace did not last forever in its perfect form. The anxious mind is persistent, and patterns built over decades do not dissolve overnight. But something fundamental shifted, and it has not shifted back.
+
+My baseline anxiety dropped significantly and has stayed lower. The catastrophic thoughts still arise sometimes, but I can see them now as thoughts rather than truths. I can observe them with curiosity rather than being hijacked by them. Most importantly, I know from direct experience that peace exists inside me. The silence is there beneath the noise. I can find my way back to it.
+
+I have done two more psilocybin sessions since that first one, each deepening the work. I continue therapy and meditation. The combination of these practices has given me something I spent forty years believing I would never have: a life not dominated by fear.
+
+If anxiety has convinced you that peace is not possible for you, it is lying. I know because it told me the same thing.',
+  'Anxiety Disorder Healing with Mushrooms | Member Story',
+  'A member shares how psilocybin helped overcome 20 years of generalized anxiety disorder.',
+  'Stories',
+  'anxiety healing, GAD, psilocybin therapy, mental health, member story',
+  true, NOW(), true, NOW()
+) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();

@@ -16,6 +16,7 @@ import OptIn from "./pages/OptIn";
 import Community from "./pages/Community";
 import PostDetail from "./pages/PostDetail";
 import VendorDetail from "./pages/VendorDetail";
+import Checkout from "./pages/Checkout";
 
 function Router() {
   return (
@@ -27,6 +28,7 @@ function Router() {
       <Route path={"/blog/:slug"} component={BlogPost} />
       <Route path={"/articles/:slug"} component={BlogPost} />
       <Route path={"/join"} component={Join} />
+      <Route path={"/checkout"} component={Checkout} />
       <Route path={"/login"} component={Login} />
       <Route path={"/register"} component={Login} />
       <Route path={"/dashboard"} component={Dashboard} />

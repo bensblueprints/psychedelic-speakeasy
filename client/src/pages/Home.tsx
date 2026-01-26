@@ -665,39 +665,17 @@ export default function Home() {
                 <span className="font-bold"> "The Beginner's Guide to Safe & Effective Microdosing"</span>
               </p>
 
-              {isAuthenticated ? (
-                <Link href="/join">
-                  <Button 
-                    className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide w-full sm:w-auto"
-                  >
-                    BECOME A MEMBER - $97/YEAR
-                  </Button>
-                </Link>
-              ) : (
-                <div className="space-y-4">
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <Input
-                        type="email"
-                        placeholder="Enter your email to get started"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="flex-1 bg-input border-border text-foreground placeholder:text-muted-foreground h-12 font-body"
-                        required
-                      />
-                      <Button 
-                        type="submit" 
-                        disabled={isSubmitting}
-                        className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-sm tracking-wide"
-                      >
-                        {isSubmitting ? "SUBMITTING..." : "GET ACCESS"}
-                      </Button>
-                    </div>
-                  </form>
-                  <p className="text-sm text-muted-foreground">
-                    Or <a href={getLoginUrl()} className="text-primary hover:underline">login</a> if you already have an account
-                  </p>
-                </div>
+              <Link href="/checkout">
+                <Button
+                  className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide w-full sm:w-auto"
+                >
+                  BECOME A MEMBER - $97/YEAR
+                </Button>
+              </Link>
+              {!isAuthenticated && (
+                <p className="text-sm text-muted-foreground mt-4">
+                  Already a member? <Link href="/login" className="text-primary hover:underline">Login here</Link>
+                </p>
               )}
 
               <p className="text-xs text-muted-foreground mt-4 font-typewriter">
@@ -837,23 +815,13 @@ export default function Home() {
               Don't spend another day trapped in the cycle of suffering. Join thousands of others 
               who have found hope, healing, and transformation through the Psychedelic Speakeasy.
             </p>
-            {isAuthenticated ? (
-              <Link href="/join">
-                <Button 
-                  className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide"
-                >
-                  BECOME A MEMBER - $97/YEAR
-                </Button>
-              </Link>
-            ) : (
-              <a href={getLoginUrl()}>
-                <Button 
-                  className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide"
-                >
-                  JOIN NOW - $97/YEAR
-                </Button>
-              </a>
-            )}
+            <Link href="/checkout">
+              <Button
+                className="h-14 px-12 bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg tracking-wide"
+              >
+                BECOME A MEMBER - $97/YEAR
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>

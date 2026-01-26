@@ -10,6 +10,45 @@ import {
   signOut as supabaseSignOut
 } from '../lib/supabase';
 
+// Helper to ensure user record exists in our users table
+async function ensureUserRecord(authUser: AuthUser): Promise<User | null> {
+  // First try to get existing profile
+  const { data: existingUser } = await supabase
+    .from('users')
+    .select('*')
+    .eq('openId', authUser.id)
+    .maybeSingle();
+
+  if (existingUser) {
+    return existingUser as User;
+  }
+
+  // Create new user record if none exists
+  // Check if this email should be admin (for initial setup)
+  const isAdminEmail = authUser.email === 'admin@speakeasy.com';
+
+  const { data: newUser, error } = await supabase
+    .from('users')
+    .insert({
+      openId: authUser.id,
+      email: authUser.email,
+      name: authUser.user_metadata?.name || authUser.email?.split('@')[0] || 'Member',
+      role: isAdminEmail ? 'admin' : 'user',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      lastSignedIn: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error creating user record:', error);
+    return null;
+  }
+
+  return newUser as User;
+}
+
 interface AuthContextType {
   authUser: AuthUser | null;
   userProfile: User | null;
@@ -43,7 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAuthUser(user);
 
         if (user) {
-          const profile = await getCurrentUserProfile();
+          // Ensure user record exists and get profile
+          const profile = await ensureUserRecord(user);
           setUserProfile(profile);
         }
       } catch (error) {
@@ -61,7 +101,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAuthUser(session?.user ?? null);
 
         if (session?.user) {
-          const profile = await getCurrentUserProfile();
+          // Ensure user record exists and get profile
+          const profile = await ensureUserRecord(session.user);
           setUserProfile(profile);
         } else {
           setUserProfile(null);

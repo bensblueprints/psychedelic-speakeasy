@@ -20,12 +20,14 @@ import {
   Shield
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase, Vendor, VendorCategory, Membership, MemberProfile, CommunitySpace } from "@/lib/supabase";
 
 export default function Dashboard() {
-  const { user, isAuthenticated, isAdmin, loading: authLoading, logout } = useAuth();
+  const { authUser, userProfile, isLoading: authLoading, isAdmin, signOut } = useAuth();
+  const isAuthenticated = !!authUser;
+  const user = userProfile;
   const [, setLocation] = useLocation();
   
   // Data states
@@ -102,7 +104,7 @@ export default function Dashboard() {
   };
 
   const handleLogout = async () => {
-    await logout();
+    await signOut();
     setLocation("/");
   };
 

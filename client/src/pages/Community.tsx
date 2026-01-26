@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -38,7 +38,9 @@ import {
 import { supabase, CommunitySpace, CommunityPost, PostComment, MemberProfile } from "@/lib/supabase";
 
 export default function Community() {
-  const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
+  const { authUser, userProfile, isLoading: authLoading, signOut } = useAuth();
+  const isAuthenticated = !!authUser;
+  const user = userProfile;
   const [, setLocation] = useLocation();
   const searchString = useSearch();
   const params = new URLSearchParams(searchString);
@@ -351,7 +353,7 @@ export default function Community() {
   };
 
   const handleLogout = async () => {
-    await logout();
+    await signOut();
     setLocation("/");
   };
 

@@ -8,11 +8,12 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { getLoginUrl } from "@/const";
 
 export default function Join() {
-  const { isAuthenticated } = useAuth();
+  const { authUser } = useAuth();
+  const isAuthenticated = !!authUser;
 
   return (
     <div className="min-h-screen bg-background text-foreground">

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link, useParams } from "wouter";
 import { Calendar, Eye, ArrowLeft, LogIn, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { getLoginUrl } from "@/const";
 import { toast } from "sonner";
 
@@ -198,7 +198,8 @@ Consider working with an integration therapist or coach if you:
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
-  const { isAuthenticated } = useAuth();
+  const { authUser } = useAuth();
+  const isAuthenticated = !!authUser;
   
   const post = slug ? placeholderPosts[slug] : null;
 

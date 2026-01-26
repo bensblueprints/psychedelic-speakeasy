@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Calendar, Eye, ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { getLoginUrl } from "@/const";
 
 // Placeholder articles until backend is connected
@@ -55,7 +55,8 @@ const placeholderPosts = [
 ];
 
 export default function Blog() {
-  const { isAuthenticated } = useAuth();
+  const { authUser } = useAuth();
+  const isAuthenticated = !!authUser;
 
   return (
     <div className="min-h-screen bg-background text-foreground">

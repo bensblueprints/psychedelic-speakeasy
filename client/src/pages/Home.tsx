@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { getLoginUrl } from "@/const";
 import { 
   Shield, 
@@ -104,7 +104,9 @@ function LatestArticles() {
 }
 
 export default function Home() {
-  const { user, isAuthenticated } = useAuth();
+  const { authUser, userProfile } = useAuth();
+  const isAuthenticated = !!authUser;
+  const user = userProfile;
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 

@@ -23,7 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
@@ -43,7 +43,9 @@ import {
 import { supabase, User, Vendor, VendorCategory, BlogPost } from "@/lib/supabase";
 
 export default function AdminDashboard() {
-  const { user, isAuthenticated, isAdmin, loading: authLoading, logout } = useAuth();
+  const { authUser, userProfile, isLoading: authLoading, isAdmin, signOut } = useAuth();
+  const isAuthenticated = !!authUser;
+  const user = userProfile;
   const [, setLocation] = useLocation();
   
   // Data states
@@ -301,7 +303,7 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = async () => {
-    await logout();
+    await signOut();
     setLocation("/");
   };
 

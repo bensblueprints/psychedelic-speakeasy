@@ -42,32 +42,34 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      fetchUserData();
+    if (isAuthenticated) {
+      fetchDashboardData();
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated]);
 
-  const fetchUserData = async () => {
-    if (!user) return;
+  const fetchDashboardData = async () => {
     setLoading(true);
 
     try {
-      // Fetch membership (optional - may not exist)
-      const { data: membershipData } = await supabase
-        .from('memberships')
-        .select('*')
-        .eq('userId', user.id)
-        .eq('status', 'active')
-        .maybeSingle();
-      setMembership(membershipData);
+      // Only fetch user-specific data if we have a user profile
+      if (user) {
+        // Fetch membership (optional - may not exist)
+        const { data: membershipData } = await supabase
+          .from('memberships')
+          .select('*')
+          .eq('userId', user.id)
+          .eq('status', 'active')
+          .maybeSingle();
+        setMembership(membershipData);
 
-      // Fetch profile (optional - may not exist)
-      const { data: profileData } = await supabase
-        .from('member_profiles')
-        .select('*')
-        .eq('userId', user.id)
-        .maybeSingle();
-      setProfile(profileData);
+        // Fetch profile (optional - may not exist)
+        const { data: profileData } = await supabase
+          .from('member_profiles')
+          .select('*')
+          .eq('userId', user.id)
+          .maybeSingle();
+        setProfile(profileData);
+      }
 
       // Fetch vendors
       const { data: vendorsData, error: vendorsError } = await supabase

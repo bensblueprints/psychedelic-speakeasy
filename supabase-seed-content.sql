@@ -539,3 +539,151 @@ We fought for this country. We deserve to heal.',
   'veteran PTSD, MDMA therapy, military mental health, trauma healing, member story',
   true, NOW(), true, NOW()
 ) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();
+
+-- ============================================
+-- PREMIUM STORY 4: End-of-Life Peace (~1100 words)
+-- Members Only Content
+-- ============================================
+
+INSERT INTO blog_posts (
+  slug, title, excerpt, content, "metaTitle", "metaDescription", category, tags, "isPublished", "publishedAt", "isPremiumOnly", "createdAt"
+) VALUES (
+  'premium-end-of-life-cancer-peace',
+  'Facing Death with Mushrooms: Finding Peace with Terminal Cancer',
+  'When diagnosed with terminal cancer at 58, the fear was overwhelming. This is how psilocybin helped me find acceptance.',
+  '## The Diagnosis That Changed Everything
+
+The oncologist delivered the news with practiced gentleness, but no amount of bedside manner could soften the blow. Pancreatic cancer, stage four. Six to twelve months. The words floated in the air between us, refusing to sink into comprehension. I was fifty-eight years old, had just retired, and had plans for decades more of life. Those plans evaporated in the space of a single sentence.
+
+In the weeks that followed, terror became my constant companion. I was not afraid of death itself in some abstract sense. I had lived a good life and had made peace with the fact that all lives end. What overwhelmed me was the dying: the pain I might face, the gradual loss of independence, the burden I would become to my family, the conversations I was not ready to have, the goodbyes that would break something in me even before the disease did.
+
+I could not sleep. When exhaustion finally pulled me under, I woke within hours with my heart racing and my mind cataloging everything I would lose. I stopped eating properly because food tasted like cardboard and what was the point anyway. I withdrew from my wife, my children, my grandchildren, already beginning to grieve relationships that had not yet ended.
+
+My oncologist, progressive enough to mention unconventional options, told me about psilocybin research for end-of-life anxiety. Studies at Johns Hopkins and NYU had shown remarkable results: single psilocybin sessions producing immediate and sustained reductions in the existential distress that accompanies terminal diagnosis. He could not prescribe it, but he made sure I knew it existed.
+
+I had nothing to lose.
+
+## Preparing for an Unknown Journey
+
+Finding access to psilocybin therapy while managing an aggressive cancer took effort I barely had energy for. Through research and careful inquiries, I eventually connected with a research study accepting patients with my profile. The screening process was extensive: psychological evaluations, medical clearances, lengthy discussions about expectations and fears.
+
+The preparation sessions were unlike any therapy I had experienced. My therapists were warm, present, and unafraid of the topic that makes most people uncomfortable. We talked about death directly. We explored what I believed happened after. We examined my fears one by one, not to dismiss them but to meet them fully. What specifically terrified me about dying? What did I regret not doing? What did I most want to say to the people I loved? What did I believe my life had meant?
+
+This process alone was valuable. Most people, including those who love us, cannot sit with us in the raw reality of approaching death. They want to comfort, to distract, to offer hope of recovery even when recovery is impossible. My therapists offered something different: complete presence with exactly what was happening.
+
+## The Journey That Changed My Relationship with Death
+
+On the day of my psilocybin session, I arrived at the research center feeling like I was approaching the most important experience of my remaining life. The room was comfortable, almost living room-like, with a couch, soft lighting, and carefully chosen art. My two therapists greeted me with the calm warmth I had come to rely on.
+
+I swallowed the capsule containing 25 milligrams of synthetic psilocybin, put on an eye mask, and settled into the couch with curated music in my headphones. The therapists remained nearby, present but unobtrusive.
+
+What happened over the next six hours defies adequate description. As the medicine took hold, I felt my ordinary sense of self begin to dissolve. The ego that had spent fifty-eight years accumulating identity, defending itself, fearing its own ending, started to release its grip.
+
+And then I died. Not physically, not in the medical sense, but something essential about who I thought I was came apart completely. There was terror at first, the instinctive grasping of a self that does not want to let go. But as I surrendered, as I stopped fighting the dissolution, something extraordinary emerged.
+
+Without the boundaries of my individual self, there was no one left to die. I experienced something vast and impersonal, a field of awareness that had never been born and could never end. I understood, not intellectually but through direct experience, that what I truly was had never been the body that would soon fail me.
+
+I saw my life from outside it, as if watching a beloved movie. The struggles, the joys, the relationships, the mistakes, the growth. It was all so beautiful from this perspective, so clearly meaningful even in its pain. I understood that I had contributed something to the vast unfolding of existence, that my threads wove into the tapestry in ways I could not trace but could trust.
+
+When the medicine began to release me back to ordinary consciousness, I was weeping. Not from sadness but from gratitude. From peace. From the absolute absence of fear.
+
+## What Changed and What Remains
+
+I will not pretend that single experience permanently erased all anxiety about dying. The fear surfaces sometimes still, especially on nights when pain keeps me awake and I feel my body weakening. But something fundamental shifted.
+
+I no longer feel that I am facing death. I feel that I am approaching a transition, a transformation into something I cannot predict but no longer dread. The experience showed me that consciousness is not the small, separate thing I had believed it to be. Whatever I truly am will continue, even if this particular form does not.
+
+More practically, the session freed me to live my remaining time fully. Instead of withdrawing from my family in anticipatory grief, I have become more present with them than ever before. We have conversations I was previously too afraid to have. We say things that would have remained unspoken. We laugh more, cry more, feel more.
+
+I have stopped focusing on how much time I have left and started focusing on what I want to do with whatever time that turns out to be. I have written letters to my grandchildren that they will open at important moments in their lives. I have made peace with estranged friends. I have told my wife everything I want her to know.
+
+## A Message from the Threshold
+
+I wrote this story three months before my death. By the time you read it, I will likely have made the transition I no longer fear. I wanted to leave this testament because I know there are others standing where I stood, terrified of what approaches.
+
+If you are facing your own mortality, or supporting someone who is, please know: the terror is not inevitable. There is a path through the fear to something that feels remarkably like peace. The mushrooms showed me that death is not an ending. It is a doorway.
+
+I do not know what waits on the other side. No one does, whatever they claim. But I know that I walk toward it now without the weight of dread that once seemed unbearable.
+
+That is the gift the medicine gave me. And now I offer this story as my gift to you.',
+  'Facing Death with Psilocybin | Member Story',
+  'A terminally ill member shares how psilocybin helped find peace and acceptance facing cancer.',
+  'Stories',
+  'end of life, death anxiety, cancer, psilocybin therapy, acceptance, member story',
+  true, NOW(), true, NOW()
+) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();
+
+-- ============================================
+-- PREMIUM STORY 5: Depression Recovery (~1100 words)
+-- Members Only Content
+-- ============================================
+
+INSERT INTO blog_posts (
+  slug, title, excerpt, content, "metaTitle", "metaDescription", category, tags, "isPublished", "publishedAt", "isPremiumOnly", "createdAt"
+) VALUES (
+  'premium-depression-darkness-to-light',
+  'From Darkness to Light: My 15-Year Depression and the Trip That Changed Everything',
+  'I spent 15 years in clinical depression, trying every treatment available. One psilocybin journey showed me the way out.',
+  '## Fifteen Years in the Gray World
+
+Depression is not sadness. I want to make that clear from the beginning, because so many people misunderstand. Sadness is a color, an emotion that rises and falls, that has texture and movement. Depression is the absence of color. It is living in a gray world where nothing feels real, nothing matters, and the weight of simply existing becomes almost too heavy to bear.
+
+My depression began in my mid-twenties for no apparent reason. I had a good job, good friends, a family who loved me. There was no trauma, no obvious trigger. The gray just descended one day and refused to lift. I woke up feeling like something essential had been switched off inside me, and despite fifteen years of trying, I could not find the switch to turn it back on.
+
+I tried everything modern psychiatry had to offer. My medication history reads like a pharmacological encyclopedia: SSRIs, SNRIs, tricyclics, MAOIs, atypical antidepressants, mood stabilizers, antipsychotics augmentation. Seventeen different medications over the years, each one offering hope and eventually delivering disappointment. Some helped partially. Most just added side effects to my misery. One triggered a hypomanic episode that nearly cost me my marriage.
+
+I did twelve sessions of electroconvulsive therapy. Forty sessions of transcranial magnetic stimulation. Years of talk therapy in various modalities. Intensive outpatient programs. Ketamine infusions. By my early forties, I had accepted that I was treatment-resistant. The best I could hope for was managing symptoms enough to function, to go through the motions of life without actually living it.
+
+Then I heard about the psilocybin studies, and something stirred beneath the gray.
+
+## One Last Try
+
+I qualified for a clinical trial studying psilocybin for treatment-resistant depression. The irony was not lost on me: I had tried so many things that I was now eligible for experimental treatment. My treatment resistance was finally good for something.
+
+The preparation phase was different from anything I had experienced in conventional psychiatry. Instead of fifteen-minute medication management appointments, I spent hours with my therapists exploring my depression from angles I had never considered. Not just symptoms and brain chemistry, but meaning. What was the depression protecting me from? What had I stopped allowing myself to feel? What parts of myself had I exiled to the shadows?
+
+These questions disturbed me. I had always understood my depression as a malfunction, a broken brain requiring chemical correction. The idea that it might carry meaning, that it might be trying to tell me something, felt like blame. But my therapists were patient and persistent, and by the time of my psilocybin session, I had begun to glimpse what they might be pointing toward.
+
+## The Journey Through the Gray
+
+I took my psilocybin in a comfortable room with warm lighting, carefully selected music, and two therapists who had come to feel like allies. The eye mask and headphones helped me turn inward. The intention I carried: to understand what I needed to see.
+
+The first two hours felt like descending through layers of sediment. I encountered memory after memory I had forgotten, emotional experiences I had learned to bypass on my way to adulthood. A sensitive child overwhelmed by a chaotic home. A teenager who learned that showing feelings was dangerous. A young man who decided, somewhere below conscious thought, that the safest thing was to feel nothing at all.
+
+I understood, with sudden and devastating clarity, that my depression was not a malfunction. It was a fortress I had built to protect myself from pain. The gray walls that felt like prison were originally constructed as shelter. Somewhere along the way, the protection became the problem, but the young parts of me that had built those walls did not know any other way.
+
+I wept for that child, for the teenager, for the decades lost to a defense mechanism that had outlived its usefulness. The grief was immense, but it was also clean. It moved through me instead of freezing inside me.
+
+And then something shifted. In some space beyond ordinary experience, I found myself standing at the wall of the fortress I had built. It was enormous, gray, seemingly infinite. But I could see now that it was crumbling. Light was beginning to seep through the cracks. And I understood that I could choose to let it fall.
+
+The choice was not easy. That fortress had protected me for so long. Without it, I would feel things I had spent a lifetime avoiding. Pain. Fear. Vulnerability. But also joy, love, connection. The full spectrum that gray had hidden.
+
+I chose to let it fall.
+
+## The Light Returns
+
+I did not walk out of that session cured. The depression did not vanish overnight. But something fundamental had shifted, and over the following weeks and months, I felt the gray begin to lift in ways that fifteen years of other treatments had never achieved.
+
+Colors returned first. Not metaphorical colors but actual ones. I noticed the blue of the sky, the green of leaves, the red of a cardinal on my fence. I had not realized I had stopped seeing them until they came back.
+
+Emotions followed. I cried at a commercial, something that had not happened in years. I laughed so hard at a joke my wife told that my stomach hurt. I felt irritation, which was uncomfortable but also strangely wonderful because it was feeling something.
+
+Connection came more slowly but more profoundly. I looked at my wife and felt love as an actual sensation in my body rather than an intellectual concept. I hugged my kids and was present in the embrace instead of already thinking about what came next.
+
+One year post-psilocybin, I am off all psychiatric medications for the first time since my twenties. I am not symptom-free. The gray visits sometimes still, a familiar heaviness that settles for a day or two before lifting. But it visits now rather than lives. It is a weather pattern, not a permanent climate.
+
+## What I Want You to Know
+
+If you are in the gray place I lived for fifteen years, please do not give up. I know how impossible that sounds. I know the gray tells you nothing will ever change, that this is simply what you are. The gray is lying.
+
+Psilocybin showed me that my depression was not a life sentence but a pattern that could be changed. It gave me access to parts of myself that years of other therapy could not reach. It allowed me to rebuild from foundations I did not know were cracked.
+
+This is not a guarantee. Not everyone responds to psilocybin. Not everyone should try it. But if you have tried everything else and the gray remains, know that options exist that might not have been available before.
+
+There is light on the other side of the gray. I found it. You might too.',
+  'Depression Recovery with Psilocybin | Member Story',
+  'A member shares recovery from 15 years of treatment-resistant depression through psilocybin therapy.',
+  'Stories',
+  'depression recovery, treatment resistant, psilocybin therapy, mental health, member story',
+  true, NOW(), true, NOW()
+) ON CONFLICT (slug) DO UPDATE SET content = EXCLUDED.content, "updatedAt" = NOW();

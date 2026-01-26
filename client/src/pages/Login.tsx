@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const { signIn, signUp, loading: authLoading } = useAuth();
+  const { signIn, signUp, isLoading: authLoading } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -26,21 +26,13 @@ export default function Login() {
 
     try {
       if (isLogin) {
-        const result = await signIn(formData.email, formData.password);
-        if (result.success) {
-          toast.success("Welcome back!");
-          setLocation("/dashboard");
-        } else {
-          toast.error(result.error || "Login failed");
-        }
+        await signIn(formData.email, formData.password);
+        toast.success("Welcome back!");
+        setLocation("/dashboard");
       } else {
-        const result = await signUp(formData.email, formData.password, formData.name);
-        if (result.success) {
-          toast.success("Account created! Please check your email to confirm.");
-          setIsLogin(true);
-        } else {
-          toast.error(result.error || "Registration failed");
-        }
+        await signUp(formData.email, formData.password, formData.name);
+        toast.success("Account created! Please check your email to confirm.");
+        setIsLogin(true);
       }
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");

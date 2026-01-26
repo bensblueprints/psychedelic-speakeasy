@@ -124,29 +124,14 @@ export default function Join() {
                   </div>
                 </div>
 
-                {isAuthenticated ? (
-                  <div className="text-center">
-                    <p className="text-muted-foreground mb-4">
-                      Payment processing coming soon!
-                    </p>
-                    <Link href="/dashboard">
-                      <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg py-6">
-                        GO TO DASHBOARD
-                      </Button>
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <a href={getLoginUrl()}>
-                      <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg py-6">
-                        LOGIN TO JOIN
-                      </Button>
-                    </a>
-                    <p className="text-center text-sm text-muted-foreground">
-                      Create an account or login to complete your membership
-                    </p>
-                  </div>
-                )}
+                <Link href="/checkout">
+                  <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-headline text-lg py-6">
+                    BECOME A MEMBER NOW
+                  </Button>
+                </Link>
+                <p className="text-center text-sm text-muted-foreground mt-4">
+                  Secure checkout • Account created after payment
+                </p>
 
                 <div className="mt-6 space-y-3 text-center text-xs text-muted-foreground">
                   <div className="flex items-center justify-center gap-2">

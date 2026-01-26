@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Eye, EyeOff, Loader2, ArrowLeft, Lock, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function Login() {
+  const [, setLocation] = useLocation();
+  const { signIn, signUp, loading: authLoading } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -22,24 +25,23 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Authentication failed");
+      if (isLogin) {
+        const result = await signIn(formData.email, formData.password);
+        if (result.success) {
+          toast.success("Welcome back!");
+          setLocation("/dashboard");
+        } else {
+          toast.error(result.error || "Login failed");
+        }
+      } else {
+        const result = await signUp(formData.email, formData.password, formData.name);
+        if (result.success) {
+          toast.success("Account created! Please check your email to confirm.");
+          setIsLogin(true);
+        } else {
+          toast.error(result.error || "Registration failed");
+        }
       }
-
-      toast.success(isLogin ? "Welcome back!" : "Account created successfully!");
-
-      // Use hard redirect to ensure session cookie is picked up
-      window.location.href = "/dashboard";
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");
     } finally {
@@ -158,9 +160,9 @@ export default function Login() {
               <Button
                 type="submit"
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-headline"
-                disabled={isLoading}
+                disabled={isLoading || authLoading}
               >
-                {isLoading ? (
+                {isLoading || authLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     {isLogin ? "Signing in..." : "Creating account..."}
@@ -185,6 +187,25 @@ export default function Login() {
                   {isLogin ? "Sign up" : "Sign in"}
                 </button>
               </p>
+            </div>
+
+            {/* Demo Accounts */}
+            <div className="mt-6 pt-6 border-t border-border">
+              <p className="text-xs text-muted-foreground text-center mb-3">
+                Demo Accounts (after running schema):
+              </p>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="bg-muted/50 p-2 rounded">
+                  <p className="font-medium text-foreground">Admin</p>
+                  <p className="text-muted-foreground">admin@speakeasy.com</p>
+                  <p className="text-muted-foreground">admin123</p>
+                </div>
+                <div className="bg-muted/50 p-2 rounded">
+                  <p className="font-medium text-foreground">User</p>
+                  <p className="text-muted-foreground">user@speakeasy.com</p>
+                  <p className="text-muted-foreground">user123</p>
+                </div>
+              </div>
             </div>
           </div>
 

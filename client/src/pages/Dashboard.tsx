@@ -51,56 +51,64 @@ export default function Dashboard() {
     if (!user) return;
     setLoading(true);
 
-    // Fetch membership
-    const { data: membershipData } = await supabase
-      .from('memberships')
-      .select('*')
-      .eq('userId', user.id)
-      .eq('status', 'active')
-      .single();
-    setMembership(membershipData);
+    try {
+      // Fetch membership (optional - may not exist)
+      const { data: membershipData } = await supabase
+        .from('memberships')
+        .select('*')
+        .eq('userId', user.id)
+        .eq('status', 'active')
+        .maybeSingle();
+      setMembership(membershipData);
 
-    // Fetch profile
-    const { data: profileData } = await supabase
-      .from('member_profiles')
-      .select('*')
-      .eq('userId', user.id)
-      .single();
-    setProfile(profileData);
+      // Fetch profile (optional - may not exist)
+      const { data: profileData } = await supabase
+        .from('member_profiles')
+        .select('*')
+        .eq('userId', user.id)
+        .maybeSingle();
+      setProfile(profileData);
 
-    // Fetch vendors
-    const { data: vendorsData } = await supabase
-      .from('vendors')
-      .select('*')
-      .eq('isActive', true)
-      .order('sortOrder');
-    if (vendorsData) setVendors(vendorsData);
+      // Fetch vendors
+      const { data: vendorsData, error: vendorsError } = await supabase
+        .from('vendors')
+        .select('*')
+        .eq('isActive', true)
+        .order('sortOrder');
+      if (vendorsError) console.error('Vendors error:', vendorsError);
+      if (vendorsData) setVendors(vendorsData);
 
-    // Fetch vendor categories
-    const { data: categoriesData } = await supabase
-      .from('vendor_categories')
-      .select('*')
-      .eq('isActive', true)
-      .order('sortOrder');
-    if (categoriesData) setVendorCategories(categoriesData);
+      // Fetch vendor categories
+      const { data: categoriesData, error: categoriesError } = await supabase
+        .from('vendor_categories')
+        .select('*')
+        .eq('isActive', true)
+        .order('sortOrder');
+      if (categoriesError) console.error('Categories error:', categoriesError);
+      if (categoriesData) setVendorCategories(categoriesData);
 
-    // Fetch community spaces
-    const { data: spacesData } = await supabase
-      .from('community_spaces')
-      .select('*')
-      .eq('isActive', true)
-      .order('sortOrder');
-    if (spacesData) setCommunitySpaces(spacesData);
+      // Fetch community spaces
+      const { data: spacesData, error: spacesError } = await supabase
+        .from('community_spaces')
+        .select('*')
+        .eq('isActive', true)
+        .order('sortOrder');
+      if (spacesError) console.error('Spaces error:', spacesError);
+      if (spacesData) setCommunitySpaces(spacesData);
 
-    // Fetch resources
-    const { data: resourcesData } = await supabase
-      .from('resources')
-      .select('*')
-      .eq('isActive', true)
-      .order('sortOrder');
-    if (resourcesData) setResources(resourcesData);
-
-    setLoading(false);
+      // Fetch resources
+      const { data: resourcesData, error: resourcesError } = await supabase
+        .from('resources')
+        .select('*')
+        .eq('isActive', true)
+        .order('sortOrder');
+      if (resourcesError) console.error('Resources error:', resourcesError);
+      if (resourcesData) setResources(resourcesData);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLogout = async () => {

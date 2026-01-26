@@ -108,7 +108,9 @@ export default function Dashboard() {
     setLocation("/");
   };
 
-  const hasMembership = !!membership;
+  // TODO: Enable membership check when payment is integrated
+  // const hasMembership = !!membership;
+  const hasMembership = true; // Grant access to all logged-in users for now
 
   // Auth check
   if (authLoading) {
@@ -236,12 +238,6 @@ export default function Dashboard() {
                 <TabsContent value="vendors" className="space-y-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-headline">Vetted Vendors</h3>
-                    {!hasMembership && (
-                      <p className="text-sm text-muted-foreground flex items-center gap-1">
-                        <Lock className="w-3 h-3" />
-                        Premium vendors require membership
-                      </p>
-                    )}
                   </div>
 
                   {vendorCategories.length === 0 ? (

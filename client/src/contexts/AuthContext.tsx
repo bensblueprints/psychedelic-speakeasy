@@ -12,15 +12,42 @@ import {
 
 // Helper to ensure user record exists in our users table
 async function ensureUserRecord(authUser: AuthUser): Promise<User | null> {
-  // First try to get existing profile
-  const { data: existingUser } = await supabase
+  // First try to get existing profile by openId
+  const { data: existingByOpenId } = await supabase
     .from('users')
     .select('*')
     .eq('openId', authUser.id)
     .maybeSingle();
 
-  if (existingUser) {
-    return existingUser as User;
+  if (existingByOpenId) {
+    return existingByOpenId as User;
+  }
+
+  // Check if user exists by email (might have placeholder openId from seed data)
+  const { data: existingByEmail } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', authUser.email)
+    .maybeSingle();
+
+  if (existingByEmail) {
+    // Update the existing record with the correct openId
+    const { data: updatedUser, error } = await supabase
+      .from('users')
+      .update({
+        openId: authUser.id,
+        lastSignedIn: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
+      .eq('email', authUser.email)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating user openId:', error);
+      return existingByEmail as User; // Return existing even if update fails
+    }
+    return updatedUser as User;
   }
 
   // Create new user record if none exists

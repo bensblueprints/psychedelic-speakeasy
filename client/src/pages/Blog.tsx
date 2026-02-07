@@ -4,59 +4,14 @@ import { Calendar, Eye, ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { getLoginUrl } from "@/const";
-
-// Placeholder articles until backend is connected
-const placeholderPosts = [
-  {
-    id: 1,
-    slug: "understanding-amanita-muscaria",
-    title: "Understanding Amanita Muscaria: A Beginner's Guide",
-    excerpt: "An introduction to the history, science, and safe practices surrounding this ancient sacred mushroom.",
-    category: "Education",
-    publishedAt: new Date("2026-01-15"),
-    viewCount: 1247,
-  },
-  {
-    id: 2,
-    slug: "psilocybin-research-2026",
-    title: "The Latest Psilocybin Research: What Science is Revealing",
-    excerpt: "A comprehensive overview of recent clinical trials and breakthrough findings in psychedelic therapy.",
-    category: "Research",
-    publishedAt: new Date("2026-01-10"),
-    viewCount: 892,
-  },
-  {
-    id: 3,
-    slug: "integration-practices",
-    title: "Integration Practices: Making the Most of Your Journey",
-    excerpt: "Essential techniques for integrating psychedelic experiences into lasting personal transformation.",
-    category: "Guides",
-    publishedAt: new Date("2026-01-05"),
-    viewCount: 654,
-  },
-  {
-    id: 4,
-    slug: "microdosing-protocols",
-    title: "Microdosing Protocols: Finding What Works for You",
-    excerpt: "Explore different microdosing schedules and learn how to optimize your protocol for mental clarity and wellbeing.",
-    category: "Guides",
-    publishedAt: new Date("2026-01-02"),
-    viewCount: 1089,
-  },
-  {
-    id: 5,
-    slug: "set-and-setting",
-    title: "The Importance of Set and Setting",
-    excerpt: "Why your mindset and environment are crucial for safe and meaningful psychedelic experiences.",
-    category: "Safety",
-    publishedAt: new Date("2025-12-28"),
-    viewCount: 723,
-  },
-];
+import { getPublishedBlogPosts } from "@/lib/blogData";
 
 export default function Blog() {
   const { authUser } = useAuth();
   const isAuthenticated = !!authUser;
+
+  // Get published blog posts from the actual data
+  const posts = getPublishedBlogPosts();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -109,13 +64,13 @@ export default function Blog() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-2xl md:text-3xl font-headline mb-8">
-                Latest Articles
+                Latest Articles ({posts.length})
               </h2>
 
               <div className="space-y-6">
-                {placeholderPosts.map((post, index) => (
+                {posts.map((post, index) => (
                   <motion.article
-                    key={post.id}
+                    key={post.slug}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
@@ -136,12 +91,16 @@ export default function Blog() {
                           <div className="flex items-center gap-4">
                             <span className="flex items-center gap-1">
                               <Calendar className="w-4 h-4" />
-                              {post.publishedAt.toLocaleDateString()}
+                              {post.publishedAt
+                                ? new Date(post.publishedAt).toLocaleDateString()
+                                : "Draft"}
                             </span>
-                            <span className="flex items-center gap-1">
-                              <Eye className="w-4 h-4" />
-                              {post.viewCount} views
-                            </span>
+                            {post.viewCount !== undefined && (
+                              <span className="flex items-center gap-1">
+                                <Eye className="w-4 h-4" />
+                                {post.viewCount} views
+                              </span>
+                            )}
                           </div>
                           <span className="flex items-center gap-1 text-primary">
                             Read More <ArrowRight className="w-4 h-4" />
